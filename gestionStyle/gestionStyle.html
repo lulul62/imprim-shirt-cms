@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des styles</title>
+
+
+  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
+  <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
+  <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+
+  <link rel="stylesheet" href="../css/style.css">
+<style>
+  a {
+    text-decoration: none;
+    color: black;
+  };
+</style>
+
+</head>
+
+<body>
+  <div id="app">
+    <v-app id="inspire">
+           <v-navigation-drawer persistent light  v-model="drawer">
+        <v-list @click.native.stop="mini = !mini">
+          <v-list-item>
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>build</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionGamme/gestionGammes.html">Gestion des gammes</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-item>
+          <v-list-item>
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>invert_colors</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                 <a href="../gestionCouleur/gestionCouleur.html"> Gestion des couleurs</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-item>
+          <v-list-item>
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>stars</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionStyle/gestionStyle.html">Gestion des styles</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-item>
+
+           <v-list-item>
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>get_app</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionVisuel/gestionVisuel.html">Gestion des visuels</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-item>
+
+
+           <v-divider></v-divider>
+          <v-list-item>
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>note_add</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionProduit/gestionProduit.html"> Gestion des produits</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-item>
+
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon>store</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Suivi des commandes
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          </v-list-item>
+           <v-divider></v-divider>
+          <v-list-item>
+            <v-list-item>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-icon>import_export</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>
+                    Export base de donnée client
+                  </v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+      <v-toolbar fixed class="grey darken-3" light>
+        <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-title>Gestion des styles</v-toolbar-title>
+      </v-toolbar>
+      <template>
+        <main class="linear">
+          <v-container fluid>
+
+            <v-list style="    background: white;
+    color: black;">
+              <v-list-group v-for="item in styleList" :value="item.name" v-bind:key="item.name">
+                <v-list-tile slot="item">
+                  <v-list-tile-action>
+                    <v-icon><i class="material-icons">extension</i></v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+                  </v-list-tile-content>
+                  <v-list-tile-action>
+                    <v-icon>keyboard_arrow_down</v-icon>
+                  </v-list-tile-action>
+                </v-list-tile>
+                <v-list-item>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                        <v-btn class="blue--text darken-1" flat @click.native="deleteStyle($event, item)"><i class="material-icons">delete</i> Supprimer</v-btn>
+                      </v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                    
+                        <v-btn @click.native="getCurrentStyle($event, item)" class="blue--text darken-1" flat slot="activator">
+                          <v-list-tile-title><i class="material-icons">mode_edit</i> Editer</v-list-tile-title>
+                        </v-btn>
+                
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list-item>
+              </v-list-group>
+            </v-list>
+            <v-dialog v-model="dialog">
+
+              <v-btn style="    position: fixed;
+    right: 30px;
+    bottom: 30px;" slot="activator" @click.native = "createModal = true, editModal = false" floating class="grey darken-2">
+                <v-icon light>add</v-icon>
+              </v-btn>
+              <v-card>
+                <v-card-row>
+                  <v-card-title v-if="createModal === true">Ajouter un style</v-card-title>
+                  <v-card-title v-if="editModal === true">Editer un style</v-card-title>
+                </v-card-row>
+                <v-card-row>
+                  <v-card-text>
+                    <v-text-field v-model="style.name" label="Nom du style" required></v-text-field>
+                    <v-select v-bind:items="gammesList" v-model="style.gamme" label="Selection d'une gamme" dark single-line auto></v-select>
+                    <v-select v-bind:items="genre" v-model="style.genre" label="Selection d'un genre" dark single-line auto></v-select>
+                  </v-card-text>
+                </v-card-row>
+                <v-card-row actions>
+                  <v-btn class="blue--text darken-1" flat @click.native="dialog = false, style = {}">Annuler</v-btn>
+                  <v-btn class="blue--text darken-1" v-if="createModal === true" flat @click.native="addStyle">Enregistrer</v-btn>
+                  <v-btn class="blue--text darken-1" v-if="editModal === true" flat @click.native="editStyle">Enregistrer</v-btn>
+                </v-card-row>
+              </v-card>
+            </v-dialog>
+            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
+              :vertical="mode === 'vertical'" v-model="snackbar">
+              {{ successtext }}
+              <v-btn flat class="yellow--text" @click.native="snackbar = false">Fermer</v-btn>
+            </v-snackbar>
+            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
+              :vertical="mode === 'vertical'" v-model="editsnackbar">
+              {{ edittextsuccess }}
+              <v-btn flat class="yellow--text" @click.native="editsnackbar = false">Fermer</v-btn>
+            </v-snackbar>
+            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
+              :vertical="mode === 'vertical'" v-model="deletesnackbar">
+              {{ deletesuccess }}
+              <v-btn flat class="yellow--text" @click.native="deletesnackbar = false">Fermer</v-btn>
+            </v-snackbar>
+            </v-card>
+
+      </template>
+    </v-app>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src='https://unpkg.com/vue/dist/vue.js'></script>
+  <script src='../js/vuetify.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="gestionStyle.js"></script>
+
+</body>
+
+</html>

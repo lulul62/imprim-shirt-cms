@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des couleurs</title>
+
+
+  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
+  <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
+  <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+
+  <link rel="stylesheet" href="../css/style.css">
+<style>
+  a {
+    text-decoration: none;
+    color: black;
+  };
+</style>
+
+</head>
+
+<body>
+  <div id="app">
+    <v-app id="inspire">
+      <v-navigation-drawer persistent light  v-model="drawer">
+        <v-list @click.native.stop="mini = !mini">
+         
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>build</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionGamme/gestionGammes.html">Gestion des gammes</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+   
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>invert_colors</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                 <a href="../gestionCouleur/gestionCouleur.html"> Gestion des couleurs</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+        
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>stars</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionStyle/gestionStyle.html">Gestion des styles</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+        
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>get_app</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionVisuel/gestionVisuel.html">Gestion des visuels</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+
+
+           <v-divider></v-divider>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>note_add</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <a href="../gestionProduit/gestionProduit.html"> Gestion des produits</a>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon>store</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Suivi des commandes
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          </v-list-item>
+           <v-divider></v-divider>
+      
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-icon>import_export</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>
+                    Export base de donnée client
+                  </v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+     
+        </v-list>
+      </v-navigation-drawer>
+      <v-toolbar fixed class="grey darken-3" light>
+        <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-title>Gestion des visuels</v-toolbar-title>
+      </v-toolbar>
+      <template>
+        <main class="linear">
+          <v-container fluid>
+
+<iframe width="100%" height="600px" style="border: none;" src="importImgDirective/index.html"></iframe>
+           
+      </template>
+    </v-app>
+  </div>
+  <script src='https://unpkg.com/vue/dist/vue.js'></script>
+  <script src='../js/vuetify.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="gestionVisuel.js"></script>
+
+</body>
+
+</html>
