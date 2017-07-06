@@ -8,9 +8,10 @@ let vm = new Vue({
       dialog: false,
       edit: false,
       drawer: true,
-      editModal : false, 
-      createModal : false,
+      editModal: false,
+      createModal: false,
       snackbar: false,
+      errorArray: [],
       editsnackbar: false,
       deletesnackbar: false,
       emptyForm: false,
@@ -18,9 +19,10 @@ let vm = new Vue({
       x: null,
       mode: '',
       timeout: 3000,
-      emptyFormText: "Des champs obligatoires sont manquants",
+      formError: false,
+      emptyFormText: "",
       successtext: "Enregistrement du style effectué avec succés",
-      edittextsuccess: "Enregistrement de vos modifications effectué avec sÒuccés",
+      edittextsuccess: "Enregistrement de vos modifications effectué avec succés",
       deletesuccess: 'Le style à été supprimé avec succés',
       style: {
         name: "",
@@ -42,14 +44,21 @@ let vm = new Vue({
      * Ajoute un style en base de donnée.
      */
     addStyle: function (event) {
-      if (vm.style.name === "") {
-        return vm.emptyForm = true;
+      vm.checkForm();
+      if (vm.errorArray.length > 0) {
+        console.log("erruer");
+        vm.emptyFormText = vm.errorArray.toString();
+        return vm.formError = true;
       }
-      console.log(vm.style);
+      vm.formError = false;
       this.$http.post(vm.baseUrlStyle, vm.style).then((resp) => {
         vm.style.key = resp.body.name;
         return this.$http.put(vm.baseUrlEditStyle + resp.body.name + '.json', vm.style).then((resp) => {
-          vm.style = {};
+          vm.style = {
+            name: "",
+            genre: "",
+            gamme: ""
+          };
           vm.dialog = false;
           vm.snackbar = true;
           return vm.getAllStyles();
@@ -85,20 +94,39 @@ let vm = new Vue({
         return vm.getAllStyles();
       });
     },
+
+    checkForm: function () {
+      vm.errorArray = [];
+      if (vm.style.genre === "") {
+        vm.errorArray.push("Genre");
+      }
+      if (vm.style.name === "") {
+        vm.errorArray.push("Nom");
+      }
+      if (vm.style.gamme === "") {
+        vm.errorArray.push("Gamme");
+      }
+      console.log(vm.errorArray);
+    },
     /**
      * Edit du style selectionné par l'utilisateur. 
      */
     editStyle: function () {
-      if (vm.style.name === "") {
-        return vm.emptyForm = true;
+      vm.errorArray = [];
+      vm.checkForm();
+      if (vm.errorArray.length > 0) {
+        vm.emptyFormText = vm.errorArray.toString();
+        return vm.formError = true;
       }
+
+      vm.formError = false;
       return this.$http.put(vm.baseUrlEditStyle + vm.style.key + ".json", vm.style).then((resp) => {
         vm.dialog = false;
         vm.createModal = true;
         vm.editModal = false;
         vm.editsnackbar = true;
         vm.style = "";
-        
+
         return vm.getAllStyles();
       });
     },
@@ -106,12 +134,12 @@ let vm = new Vue({
      * Récupere le style que l'utilisateur sÒelectionne. 
      */
     getCurrentStyle: function ($event, currentStyle) {
-          vm.editModal = true;
-          vm.createModal = false;
-          vm.dialog = true;
-          $event.stopPropagation();
-          vm.style = currentStyle;
-       
+      vm.editModal = true;
+      vm.createModal = false;
+      vm.dialog = true;
+      $event.stopPropagation();
+      vm.style = currentStyle;
+
     }
   }
 }

@@ -41,7 +41,7 @@ img2fire.controller("base64Ctrl", function($scope, $firebaseArray) {
       }
 
       if (!blnValid) {
-        alert('File is not valid');
+        alert('Extension de fichier non valide.');
         return false;
       }
     }

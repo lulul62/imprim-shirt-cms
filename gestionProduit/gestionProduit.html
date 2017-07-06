@@ -22,7 +22,12 @@
 
     .showColor {
       height: 100px;
-      width: 100px;
+      width: 100%;
+    }
+
+    .showImg {
+      width: 290px;
+      height: 290px;
     }
   </style>
 
@@ -109,21 +114,7 @@
             </v-list-tile-content>
           </v-list-tile>
           </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item>
-            <v-list-item>
-              <v-list-tile>
-                <v-list-tile-action >
-                  <v-icon>import_export</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title >
-                    <v-btn flat small @click.native="exportClientDatabase($event)">Export base de donnée client</v-btn>
-                  </v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list-item>
-            <v-list-item>
+
         </v-list>
       </v-navigation-drawer>
       <v-toolbar fixed class="grey darken-3" light>
@@ -185,10 +176,8 @@
                                 </v-card-row>
                                 <v-card-row v-for="img in visualToShow">
 
-                                  <v-list-tile avatar>
-                                    <v-list-tile-avatar>
-                                      <img v-bind:src="img.base64">
-                                    </v-list-tile-avatar>
+                                      <img class="showImg" v-bind:src="img.base64">
+                                   
 
 
                                 </v-card-row>
@@ -207,14 +196,14 @@
                         <v-btn @click.native="deleteProduit($event, props.item)" icon ripple>
                           <v-icon class="grey--text text--lighten-1">delete</v-icon>
                         </v-btn>
-                        <v-btn  @click.native="getCurrentProduit($event, props.item)" icon ripple>
+                        <v-btn @click.native="getCurrentProduit($event, props.item)" icon ripple>
                           <v-icon class="grey--text text--lighten-1">mode_edit</v-icon>
                         </v-btn>
                       </td>
-                  
+
                     </template>
                     <template slot="pageText" scope="{ pageStart, pageStop }">
-                      From {{ pageStart }} to {{ pageStop }}Ò
+                      From {{ pageStart }} to {{ pageStop }}
                     </template>
                   </v-data-table>
                 </v-card>
@@ -233,15 +222,37 @@
                         </v-btn>
                         <v-toolbar-title v-if="createModalTitle === true">Ajouter un produit</v-toolbar-title>
                         <v-toolbar-title v-if="editModalTitle === true">Editer un produit</v-toolbar-title>
-                        <v-btn v-if="createModalTitle === true" light flat @click.native="addProduit">Enregistrer</v-btn>
+                         <v-btn v-if="createModalTitle === true" light flat @click.native="addProduit">Enregistrer</v-btn>
                         <v-btn v-if="editModalTitle === true" light flat @click.native="editProduit">Enregistrer</v-btn>
+                     
+                          <template>
+                            <v-layout row justify-center>
+                              <v-dialog v-model="saveModal" persistent>
+                              
+                                <v-card>
+                                  <v-card-row>
+                                    <v-card-title>Sauvegarde en cours, veuillez patienter...</v-card-title>
+                                  </v-card-row>
+                                  <v-card-row>
+                                    <v-card-text></v-card-text>
+                                  </v-card-row>
+                                  <v-card-row actions>
+                                    
+                                  </v-card-row>
+                                </v-card>
+                              </v-dialog>
+                            </v-layout>
+                          </template>
+                         
+                       
+                         
                       </v-toolbar>
                     </v-card-row>
                     <v-list three-line subheader>
                       <v-subheader>Sélectionner les visuels du produit ({{produit.visuel.length}} visuels ajoutés)
                         <div>
                           <v-btn @click.native="clearProductVisual" warning light>Annuler la sélection</v-btn>
-                          
+
                         </div>
                       </v-subheader>
                       <template v-for="item in imgList" xs6>
@@ -287,15 +298,15 @@
                               <v-text-field type="number" step="0.01" label="Prix" v-model="produit.prix" required></v-text-field>
 
                             </v-flex>
-                             <v-flex xs6>
-                              <v-text-field  type="number" step="0.01" label="Prix promotion" v-model="produit.prixpromotion" required></v-text-field>
+                            <v-flex xs6>
+                              <v-text-field type="number" step="0.01" label="Prix promotion" v-model="produit.prixpromotion" required></v-text-field>
 
                             </v-flex>
                             <v-flex xs6>
                               <v-text-field label="Nom du produit" v-model="produit.nom" required></v-text-field>
 
                             </v-flex>
-                            
+
                           </v-layout>
                         </v-container>
 
@@ -320,6 +331,11 @@
         :vertical="mode === 'vertical'" v-model="snackbar">
         {{ successtext }}
         <v-btn flat class="yellow--text" @click.native="snackbar = false">Fermer</v-btn>
+      </v-snackbar>
+      <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
+        :vertical="mode === 'vertical'" v-model="formSnackbar">
+        Les champs suivants sont manquants : {{ notificationError }}
+
       </v-snackbar>
       <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
         :vertical="mode === 'vertical'" v-model="editsnackbar">

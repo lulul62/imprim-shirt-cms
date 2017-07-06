@@ -8,7 +8,7 @@ let vm = new Vue({
       baseUrlStyle: "https://transfertprod-668c2.firebaseio.com/styleList.json",
       baseUrlGamme: "https://transfertprod-668c2.firebaseio.com/gammeList.json",
       baseUrlImgList: "https://transfertprod-668c2.firebaseio.com/imglist.json",
-      baseUrlClient : "https://transfertprod-668c2.firebaseio.com/client.json",
+      baseUrlClient: "https://transfertprod-668c2.firebaseio.com/client.json",
       dialog: false,
       couleurList: [],
       styleList: [],
@@ -16,8 +16,13 @@ let vm = new Vue({
       visual: false,
       seeVisual: false,
       imgList: [],
+      saveModal: false,
+      isLoading: false,
       createModalTitle: true,
+      notificationError: "",
+      errorForm: false,
       editModalTitle: false,
+      formSnackbar: false,
       couleurToShow: [],
       seeColor: false,
       genreList: ["Homme", "Femme", "Fille", "Garçon"],
@@ -25,6 +30,7 @@ let vm = new Vue({
       e6: 1,
       drawer: true,
       snackbar: false,
+      errorArray: [],
       editsnackbar: false,
       deletesnackbar: false,
       visualToShow: [],
@@ -72,10 +78,17 @@ let vm = new Vue({
      * Ajoute un produit en base de donnée.
      */
     addProduit: function (event) {
+      vm.checkForm();
+      if (vm.errorArray.length > 0) {
+        vm.formSnackbar = true;
+        return vm.notificationError = vm.errorArray.toString();
+      }
+      vm.dialog = false;
+      vm.saveModal = true;
       return this.$http.post(vm.baseUrlProduit, vm.produit).then((produit) => {
+        vm.notificationError = "";
         vm.produit.key = produit.body.name;
         this.$http.put(vm.baseUrlEditProduit + produit.body.name + '.json', vm.produit).then((resp) => {
-          vm.dialog = false;
           vm.produit = {
             nom: "",
             gamme: "",
@@ -87,7 +100,8 @@ let vm = new Vue({
             prix: ""
           },
             vm.successtext = true;
-          return vm.getAllProduit();
+          vm.getAllProduit();
+          return vm.saveModal = false;
         });
       });
     },
@@ -121,6 +135,40 @@ let vm = new Vue({
           vm.couleurList.push(couleur.data[key].value);
         });
       })
+    },
+    /**
+     * Check de l'état du formulaire avant l'envoie d'un nouveau produit 
+     */
+    checkForm: function () {
+      vm.errorArray = [];
+      if (vm.produit.nom === "") {
+        vm.errorArray.push("Nom");
+      }
+      if (vm.produit.gamme === "") {
+        vm.errorArray.push("Gamme");
+      }
+      if (vm.produit.genre === "") {
+        vm.errorArray.push("Genre")
+      }
+      if (vm.produit.style === "") {
+        vm.errorArray.push("Style");
+      }
+      if (vm.produit.prix === "") {
+        vm.errorArray.push("Prix");
+      }
+      if (vm.produit.prixpromotion === "") {
+        vm.errorArray.push("Prix promotion");
+      }
+      if (vm.produit.poid === "") {
+        vm.errorArray.push("Poid");
+      }
+      if (vm.produit.couleur.length === 0) {
+        vm.errorArray.push("Couleur");
+      }
+      if (vm.produit.visuel.length === 0) {
+        vm.errorArray.push("Visuel");
+      }
+
     },
 
     /**
@@ -158,10 +206,17 @@ let vm = new Vue({
      * Edit du produit selectionné par l'utilisateur. 
      */
     editProduit: function ($event) {
+      vm.checkForm();
+      if (vm.errorArray.length > 0) {
+        vm.formSnackbar = true;
+        return vm.notificationError = vm.errorArray.toString();
+      }
+      vm.dialog = false;
+      vm.saveModal = true;
       return this.$http.put(vm.baseUrlEditProduit + vm.produit.key + ".json", vm.produit).then((resp) => {
-        vm.dialog = false;
         vm.editsnackbar = true;
-        return vm.getAllProduit();
+        vm.getAllProduit();
+        return vm.saveModal = false;
       });
     },
     /**
@@ -221,9 +276,9 @@ let vm = new Vue({
         vm.couleurToShow.push({ "colorName": couleur });
       });
     },
-/**
- * Export de la base de donnée client
- */
+    /**
+     * Export de la base de donnée client
+     */
     exportClientDatabase: function ($event) {
       return this.$http.get(vm.baseUrlClient).then((clientFile) => {
         let link = document.createElement("a");

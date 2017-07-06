@@ -102,21 +102,7 @@
             </v-list-tile-content>
           </v-list-tile>
           </v-list-item>
-           <v-divider></v-divider>
-          <v-list-item>
-            <v-list-item>
-              <v-list-tile>
-                <v-list-tile-action>
-                  <v-icon>import_export</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>
-                    Export base de donnée client
-                  </v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list-item>
-            <v-list-item>
+           
         </v-list>
       </v-navigation-drawer>
       <v-toolbar fixed class="grey darken-3" light>
@@ -167,7 +153,7 @@
 
               <v-btn style="    position: fixed;
     right: 30px;
-    bottom: 30px;" slot="activator" @click.native = "createModal = true, editModal = false" floating class="grey darken-2">
+    bottom: 30px;" slot="activator" @click.native = 'createModal = true, editModal = false, style = {name : "", gamme : "", genre: ""}' floating class="grey darken-2">
                 <v-icon light>add</v-icon>
               </v-btn>
               <v-card>
@@ -192,6 +178,11 @@
             <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
               :vertical="mode === 'vertical'" v-model="snackbar">
               {{ successtext }}
+              <v-btn flat class="yellow--text" @click.native="snackbar = false">Fermer</v-btn>
+            </v-snackbar>
+            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
+              :vertical="mode === 'vertical'" v-model="formError">
+             Les champs suivants sont manquants :  {{ emptyFormText }}
               <v-btn flat class="yellow--text" @click.native="snackbar = false">Fermer</v-btn>
             </v-snackbar>
             <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"

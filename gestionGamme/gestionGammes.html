@@ -103,21 +103,7 @@
             </v-list-tile-content>
           </v-list-tile>
           </v-list-item>
-           <v-divider></v-divider>
-          <v-list-item>
-            <v-list-item>
-              <v-list-tile>
-                <v-list-tile-action>
-                  <v-icon>import_export</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>
-                    Export base de donnée client
-                  </v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list-item>
-            <v-list-item>
+         
         </v-list>
       </v-navigation-drawer>
       <v-toolbar fixed class="grey darken-3" light>
@@ -193,6 +179,11 @@
             <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
               :vertical="mode === 'vertical'" v-model="snackbar">
               {{ successtext }}
+              <v-btn flat class="yellow--text" @click.native="snackbar = false">Fermer</v-btn>
+            </v-snackbar>
+            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
+              :vertical="mode === 'vertical'" v-model="emptyForm">
+              {{ emptyFormText }}
               <v-btn flat class="yellow--text" @click.native="snackbar = false">Fermer</v-btn>
             </v-snackbar>
             <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
