@@ -8,7 +8,7 @@
 
   <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
   <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
-
+  <meta name="viewport" content="width=device-width, user-scalable=no">
   <link rel="stylesheet" href="../css/style.css">
   <style>
     a {
@@ -21,13 +21,14 @@
     }
 
     .showColor {
-      height: 100px;
+      height: 50px;
       width: 100%;
     }
 
     .showImg {
-      width: 290px;
-      height: 290px;
+      width: 150px;
+      height: 150px;
+      margin-left: 4pc;
     }
   </style>
 
@@ -145,14 +146,14 @@
                       <td class="text-xs-right">
                         <template>
                           <v-layout row justify-center>
-                            <v-dialog v-model="seeColor" persistent>
+                            <v-dialog v-model="seeColor" scrollable persistent>
                               <v-btn @click.native="showCurrentColorOfProduct($event, props)" secondary light slot="activator">Voir</v-btn>
                               <v-card>
                                 <v-card-row>
                                   <v-card-title>Couleurs du produit</v-card-title>
                                 </v-card-row>
 
-                                <v-card-row v-for="couleur in couleurToShow">
+                                <v-card-row style="height : 300px;" v-for="couleur in couleurToShow">
                                   <div class="showColor" v-bind:style="{background : couleur.colorName}"></div>
 
                                 </v-card-row>
@@ -166,20 +167,19 @@
                         </template>
                       </td>
                       <td class="text-xs-right">
+
                         <template>
                           <v-layout row justify-center>
-                            <v-dialog v-model="seeVisual" persistent>
+                            <v-dialog v-model="seeVisual" scrollable persistent>
                               <v-btn @click.native="showCurrentVisualOfproduct($event, props)" primary light slot="activator">Voir</v-btn>
                               <v-card>
                                 <v-card-row>
                                   <v-card-title>Visuels du produit</v-card-title>
                                 </v-card-row>
+
                                 <v-card-row v-for="img in visualToShow">
 
-                                      <img class="showImg" v-bind:src="img.base64">
-                                   
-
-
+                                     <li style="display: inline"><img class="showImg" v-bind:src="img.base64"></li>
                                 </v-card-row>
                                 <v-card-row actions>
                                   <v-btn class="green--text darken-1" flat="flat" @click.native="seeVisual = false">Fermer</v-btn>
@@ -207,7 +207,7 @@
                     </template>
                   </v-data-table>
                 </v-card>
-                <v-dialog v-model="dialog" fullscreen transition="v-dialog-bottom-transition" :overlay=false>
+                <v-dialog v-model="dialog" fullscreen scrollable transition="v-dialog-bottom-transition" :overlay=false>
 
                   <v-btn style=" position: fixed;
     right: 30px;
@@ -249,7 +249,7 @@
                       </v-toolbar>
                     </v-card-row>
                     <v-list three-line subheader>
-                      <v-subheader>Sélectionner les visuels du produit ({{produit.visuel.length}} visuels ajoutés)
+                      <v-subheader>Sélectionner au maximum 3 visuels pour le produit ({{produit.visuel.length}} visuels ajoutés)
                         <div>
                           <v-btn @click.native="clearProductVisual" warning light>Annuler la sélection</v-btn>
 
@@ -334,7 +334,7 @@
       </v-snackbar>
       <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
         :vertical="mode === 'vertical'" v-model="formSnackbar">
-        Les champs suivants sont manquants : {{ notificationError }}
+        Les champs suivants sont manquants ou incorrect : {{ notificationError }}
 
       </v-snackbar>
       <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"

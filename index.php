@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Login</title>
 
-
+<meta name="viewport" content="width=device-width, user-scalable=no">
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
     <link rel='stylesheet prefetch' href='js/vuetify.min.css'>
 

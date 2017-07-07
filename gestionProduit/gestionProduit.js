@@ -99,7 +99,8 @@ let vm = new Vue({
             poid: "",
             prix: ""
           },
-            vm.successtext = true;
+              vm.snackbar = true;
+            vm.successtext = "Le produit à été enregistré en base avec succés";
           vm.getAllProduit();
           return vm.saveModal = false;
         });
@@ -167,6 +168,9 @@ let vm = new Vue({
       }
       if (vm.produit.visuel.length === 0) {
         vm.errorArray.push("Visuel");
+      }
+      if(vm.produit.visuel.length > 3) {
+        vm.errorArray.push("3 visuels maximum par produit (coté, face avant, face arrière");
       }
 
     },
