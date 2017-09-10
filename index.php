@@ -124,9 +124,9 @@
         }
 
         html {
- background: #abbaab;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #ffffff, #abbaab);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #ffffff, #abbaab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: #1f1c2c; /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #1f1c2c, #928dab); /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #1f1c2c, #928dab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
         }
 
         body {
@@ -145,7 +145,6 @@ background: linear-gradient(to right, #ffffff, #abbaab); /* W3C, IE 10+/ Edge, F
             <template>
                 <div class="login-page">
                     <div class="form">
-                       
                         <form class="login-form">
                             <input v-model="user.username" type="text" placeholder="Nom d'utilisateur" />
                             <input v-model="user.password" type="password" placeholder="Mot de passe" />

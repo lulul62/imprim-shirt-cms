@@ -16,7 +16,7 @@ let vm = new Vue({
             if (vm.user.username !== "Admin" && vm.user.password !== "Admin") {
                 return window.alert("Les identifiants sont incorrects");
             }
-            window.location = "https://imprimshirtadmin.herokuapp.com/gestionProduit/gestionProduit.html"; 
+            window.location = "./gestionGamme/gestionGammes.html";
         }
     }
 }

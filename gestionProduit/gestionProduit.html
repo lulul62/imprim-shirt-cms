@@ -30,6 +30,13 @@
       height: 150px;
       margin-left: 4pc;
     }
+
+    .selectedProduct {
+      background: green;
+    }
+    .whiteCross {
+      color : white!important;
+    }
   </style>
 
 </head>
@@ -138,10 +145,7 @@
                   </v-card-title>
                   <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                     <template slot="items" scope="props">
-
-                      <td class="text-xs-right">{{ props.item.nom }}</td>
                       <td class="text-xs-right">{{ props.item.gamme }}</td>
-                      <td class="text-xs-right">{{ props.item.genre }}</td>
                       <td class="text-xs-right">{{ props.item.style }}</td>
                       <td class="text-xs-right">
                         <template>
@@ -192,6 +196,7 @@
                       </td>
                       <td class="text-xs-right">{{ props.item.poid }}</td>
                       <td class="text-xs-right">{{ props.item.prix }}</td>
+                      <td class="text-xs-right">{{ props.item.prixpromotion }}</td>
                       <td class="text-xs-right">
                         <v-btn @click.native="deleteProduit($event, props.item)" icon ripple>
                           <v-icon class="grey--text text--lighten-1">delete</v-icon>
@@ -260,8 +265,8 @@
                           <v-list-tile-avatar>
                             <img v-bind:src="item.base64">
                             <v-list-tile-action>
-                              <v-btn @click.native="addVisuelToProduit($event, item)" icon ripple>
-                                <v-icon class="grey--text text--lighten-1">add</v-icon>
+                              <v-btn v-bind:class="{ selectedProduct: item.isActive }" @click.native="addVisuelToProduit($event, item)" icon ripple>
+                                <v-icon v-bind:class="{ whiteCross: item.isActive }" class="grey--text text--lighten-1">add</v-icon>
                               </v-btn>
                             </v-list-tile-action>
                           </v-list-tile-avatar>
@@ -292,21 +297,16 @@
                               <v-select v-bind:items="genreList" v-model="produit.genre" label="Selectionner un genre" dark single-line auto></v-select>
                             </v-flex>
                             <v-flex xs6>
-                              <v-text-field type="number" step="0.01" label="Poid" v-model="produit.poid" required></v-text-field>
+                              <v-text-field type="number" step="0.01" label="Poids (gramme)" v-model="produit.poid" required></v-text-field>
                             </v-flex>
                             <v-flex xs6>
-                              <v-text-field type="number" step="0.01" label="Prix" v-model="produit.prix" required></v-text-field>
+                              <v-text-field type="number" step="0.01" label="Prix (euros)" v-model="produit.prix" required></v-text-field>
 
                             </v-flex>
                             <v-flex xs6>
                               <v-text-field type="number" step="0.01" label="Prix promotion" v-model="produit.prixpromotion" required></v-text-field>
 
                             </v-flex>
-                            <v-flex xs6>
-                              <v-text-field label="Nom du produit" v-model="produit.nom" required></v-text-field>
-
-                            </v-flex>
-
                           </v-layout>
                         </v-container>
 
