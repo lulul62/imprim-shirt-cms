@@ -29,12 +29,10 @@ let vm = new Vue({
         genre: "",
         gamme: "",
       },
-      genre: ["Homme", "Femme", "Fille", "Garçon"],
       currentStyle: {
       },
       styleList: [
       ],
-      gammesList: [],
       mini: false,
 
     }
@@ -46,7 +44,6 @@ let vm = new Vue({
     addStyle: function (event) {
       vm.checkForm();
       if (vm.errorArray.length > 0) {
-        console.log("erruer");
         vm.emptyFormText = vm.errorArray.toString();
         return vm.formError = true;
       }
@@ -55,9 +52,7 @@ let vm = new Vue({
         vm.style.key = resp.body.name;
         return this.$http.put(vm.baseUrlEditStyle + resp.body.name + '.json', vm.style).then((resp) => {
           vm.style = {
-            name: "",
-            genre: "",
-            gamme: ""
+            name: ""
           };
           vm.dialog = false;
           vm.snackbar = true;
@@ -75,16 +70,6 @@ let vm = new Vue({
     },
 
     /**
-     * Récupere l'ensemble des gammes.
-     */
-    getAllGammes: function (event) {
-      return this.$http.get(vm.baseUrlGamme).then((gammes) => {
-        Object.keys(gammes.data).forEach(function (key) {
-          vm.gammesList.push(gammes.data[key].name);
-        });
-      })
-    },
-    /**
      * Supprime le style cliqué par l'utilisateur.
      */
     deleteStyle: function ($event, currentStyle) {
@@ -97,16 +82,9 @@ let vm = new Vue({
 
     checkForm: function () {
       vm.errorArray = [];
-      if (vm.style.genre === "") {
-        vm.errorArray.push("Genre");
-      }
       if (vm.style.name === "") {
         vm.errorArray.push("Nom");
       }
-      if (vm.style.gamme === "") {
-        vm.errorArray.push("Gamme");
-      }
-      console.log(vm.errorArray);
     },
     /**
      * Edit du style selectionné par l'utilisateur. 
@@ -144,5 +122,5 @@ let vm = new Vue({
   }
 }
 );
-vm.getAllGammes();
+
 vm.getAllStyles();

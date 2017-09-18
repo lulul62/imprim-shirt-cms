@@ -30,6 +30,13 @@
       height: 150px;
       margin-left: 4pc;
     }
+
+    .selectedProduct {
+      background: green;
+    }
+    .whiteCross {
+      color : white!important;
+    }
   </style>
 
 </head>
@@ -104,6 +111,7 @@
             </v-list-tile>
           </v-list-item>
 
+
           <v-list-tile>
             <v-list-tile-action>
               <v-icon>store</v-icon>
@@ -138,10 +146,7 @@
                   </v-card-title>
                   <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                     <template slot="items" scope="props">
-
-                      <td class="text-xs-right">{{ props.item.nom }}</td>
                       <td class="text-xs-right">{{ props.item.gamme }}</td>
-                      <td class="text-xs-right">{{ props.item.genre }}</td>
                       <td class="text-xs-right">{{ props.item.style }}</td>
                       <td class="text-xs-right">
                         <template>
@@ -176,7 +181,6 @@
                                 <v-card-row>
                                   <v-card-title>Visuels du produit</v-card-title>
                                 </v-card-row>
-
                                 <v-card-row v-for="img in visualToShow">
 
                                      <li style="display: inline"><img class="showImg" v-bind:src="img.base64"></li>
@@ -192,6 +196,7 @@
                       </td>
                       <td class="text-xs-right">{{ props.item.poid }}</td>
                       <td class="text-xs-right">{{ props.item.prix }}</td>
+                      <td class="text-xs-right">{{ props.item.prixpromotion }}</td>
                       <td class="text-xs-right">
                         <v-btn @click.native="deleteProduit($event, props.item)" icon ripple>
                           <v-icon class="grey--text text--lighten-1">delete</v-icon>
@@ -255,21 +260,33 @@
 
                         </div>
                       </v-subheader>
-                      <template v-for="item in imgList" xs6>
-                        <v-list-tile avatar>
-                          <v-list-tile-avatar>
-                            <img v-bind:src="item.base64">
-                            <v-list-tile-action>
-                              <v-btn @click.native="addVisuelToProduit($event, item)" icon ripple>
-                                <v-icon class="grey--text text--lighten-1">add</v-icon>
-                              </v-btn>
-                            </v-list-tile-action>
-                          </v-list-tile-avatar>
+                      <template>
+                        <v-expansion-panel>
+                          <v-expansion-panel-content v-for="(item,i) in 1" :key="i">
+                            <div slot="header">Afficher les visuels disponibles</div>
+                            <v-card>
+                              <v-card-text class="grey lighten-3">
+                                <template v-for="item in imgList" xs6>
+                                  <v-list-tile avatar>
+                                    <v-list-tile-avatar>
+                                      <img v-bind:src="item.base64">
+                                      <v-list-tile-action>
+                                        <v-btn v-bind:class="{ selectedProduct: item.isActive }" @click.native="addVisuelToProduit($event, item)" icon ripple>
+                                          <v-icon v-bind:class="{ whiteCross: item.isActive }" class="grey--text text--lighten-1">add</v-icon>
+                                        </v-btn>
+                                      </v-list-tile-action>
+                                    </v-list-tile-avatar>
 
-                          </v-list-tile-avatar>
-                        </v-list-tile>
-                        </v-list-item>
+                                    </v-list-tile-avatar>
+                                  </v-list-tile>
+                                  </v-list-item>
+                                </template>
+                              </v-card-text>
+                            </v-card>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
                       </template>
+
                       </v-list-item>
                     </v-list>
                     <v-divider></v-divider>
@@ -286,24 +303,24 @@
                                 persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs6>
+                              <v-select label="Selectionner les tailles disponibles" v-bind:items="tailles" v-model="produit.tailles" multiple dark max-height="400"
+                                        persistent-hint></v-select>
+                            </v-flex>
+                            <v-flex xs6>
                               <v-select v-bind:items="styleList" v-model="produit.style" label="Selectionner un style" dark single-line auto></v-select>
                             </v-flex>
                             <v-flex xs6>
                               <v-select v-bind:items="genreList" v-model="produit.genre" label="Selectionner un genre" dark single-line auto></v-select>
                             </v-flex>
                             <v-flex xs6>
-                              <v-text-field type="number" step="0.01" label="Poid" v-model="produit.poid" required></v-text-field>
+                              <v-text-field type="number" step="0.01" label="Poids (gramme)" v-model="produit.poid" required></v-text-field>
                             </v-flex>
                             <v-flex xs6>
-                              <v-text-field type="number" step="0.01" label="Prix" v-model="produit.prix" required></v-text-field>
+                              <v-text-field type="number" step="0.01" label="Prix (euros)" v-model="produit.prix" required></v-text-field>
 
                             </v-flex>
                             <v-flex xs6>
                               <v-text-field type="number" step="0.01" label="Prix promotion" v-model="produit.prixpromotion" required></v-text-field>
-
-                            </v-flex>
-                            <v-flex xs6>
-                              <v-text-field label="Nom du produit" v-model="produit.nom" required></v-text-field>
 
                             </v-flex>
 
