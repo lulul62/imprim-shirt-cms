@@ -2,124 +2,181 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>Gestion des couleurs</title>
+    <meta charset="UTF-8">
+    <title>Gestion des couleurs</title>
 
 
-  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
-  <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
-  <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel='stylesheet prefetch'
+          href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
+    <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
 
-  <link rel="stylesheet" href="../css/style.css">
-<style>
-  a {
-    text-decoration: none;
-    color: black;
-  };
-</style>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="
+https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.css">
+    <style>
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .layout .flex {
+            padding: 6px;
+        }
+    </style>
 
 </head>
 
 <body>
-  <div id="app">
+<div id="app">
     <v-app id="inspire">
-      <v-navigation-drawer persistent light  v-model="drawer">
-        <v-list @click.native.stop="mini = !mini">
-         
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>build</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionGamme/gestionGammes.html">Gestion des gammes</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-   
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>invert_colors</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                 <a href="../gestionCouleur/gestionCouleur.html"> Gestion des couleurs</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-        
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>stars</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionStyle/gestionStyle.html">Gestion des styles</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-        
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>get_app</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionVisuel/gestionVisuel.html">Gestion des visuels</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+        <v-navigation-drawer persistent light v-model="drawer">
+            <v-list @click.native.stop="mini = !mini">
+
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>build</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a href="../gestionGamme/gestionGammes.html">Gestion des gammes</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>invert_colors</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a href="../gestionCouleur/gestionCouleur.html"> Gestion des couleurs</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>stars</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a href="../gestionStyle/gestionStyle.html">Gestion des styles</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>get_app</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a href="../gestionVisuel/gestionVisuel.html">Gestion des visuels</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
 
 
+                <v-divider></v-divider>
 
-           <v-divider></v-divider>
-
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>note_add</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionProduit/gestionProduit.html"> Gestion des produits</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>note_add</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a href="../gestionProduit/gestionProduit.html"> Gestion des produits</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
 
 
-          <v-list-tile>
-            <v-list-tile-action>
-              <v-icon>store</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                Suivi des commandes
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          </v-list-item>
-           
-     
-        </v-list>
-      </v-navigation-drawer>
-      <v-toolbar fixed class="grey darken-3" light>
-        <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>Gestion des visuels</v-toolbar-title>
-      </v-toolbar>
-      <template>
-        <main class="linear">
-          <v-container fluid>
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>store</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            Suivi des commandes
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                </v-list-item>
 
-<iframe width="100%" height="600px" style="border: none;" src="importImgDirective/index.html"></iframe>
-           
-      </template>
+
+            </v-list>
+        </v-navigation-drawer>
+        <v-toolbar fixed class="grey darken-3" light>
+            <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-title>Gestion des visuels</v-toolbar-title>
+        </v-toolbar>
+        <template>
+            <main class="linear">
+                <v-container fluid>
+                    <template>
+                        <v-layout row justify-center>
+                            <v-flex xs12 sm12>
+                                <v-container fluid grid-list-sm>
+                                    <v-layout row wrap>
+                                        <v-flex v-show="visualAreLoad === true" xs3 v-for="img in visualsList"
+                                                :key="img.visual">
+                                            <v-card>
+                                                <img class="image" v-bind:src="img.visual" width="100%"
+                                                     height="100%">
+                                                <v-btn block secondary light @click.native="deleteCurrentVisual(img)">
+                                                    Supprimer
+                                                </v-btn>
+                                            </v-card>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                                <v-dialog v-model="dialog" persistent>
+                                    <v-card>
+                                        <v-card-text>
+                                            <v-text-field
+                                                    label="Nom"
+                                                    class="mt-5"
+                                                    v-model="img.name"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                    label="Insérez le lien de l'image"
+                                                    class="mt-5"
+                                                    v-model="img.base64"
+                                                    :rules="[() => img.base64.length > 0 || 'Ce champs est requis']"
+                                                    required
+                                            ></v-text-field>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn error light @click.native="dialog = false, img.base64 = '', img.name =''">Annuler
+                                            </v-btn>
+                                            <v-btn primary light @click.native="addNewImg()"> Ajouter ce visuel</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
+                            </v-flex>
+                        </v-layout>
+                    </template>
+
+                    <v-btn style="    position: fixed;
+    right: 30px;
+    bottom: 30px;" slot="activator" @click.native='dialog = true' floating class="grey darken-2">
+                        <v-icon light>add</v-icon>
+                    </v-btn>
+                </v-container>
+            </main>
+        </template>
+
+
     </v-app>
-  </div>
-  <script src='https://unpkg.com/vue/dist/vue.js'></script>
-  <script src='../js/vuetify.min.js'></script>
-  <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-  <script src="gestionVisuel.js"></script>
+</div>
+<script src='https://unpkg.com/vue/dist/vue.js'></script>
+<script src='../js/vuetify.min.js'></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.js"></script>
+<script src="gestionVisuel.js"></script>
 
 </body>
 
