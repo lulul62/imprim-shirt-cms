@@ -50,31 +50,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-item>
-          <v-list-item>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>stars</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionStyle/gestionStyle.html">Gestion des styles</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-item>
 
-           <v-list-item>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>get_app</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionVisuel/gestionVisuel.html">Gestion des visuels</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-item>
 
 
            <v-divider></v-divider>
@@ -97,7 +73,7 @@
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>
-                Suivi des commandes
+                <a href="../gestionCommande/gestionCommande.html">Suivi des commandes</a>
               </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
@@ -118,7 +94,7 @@
               <v-list-group v-for="item in couleursList" :value="item.value" v-bind:key="item.name">
                 <v-list-tile slot="item">
                   <v-list-tile-action>
-                    {{item.value}}
+                  {{item.nom}} <br>{{item.value}}
                   </v-list-tile-action>
                   <v-list-tile-content>
                     <v-list-tile-title><button class="color-button" style="width: 100%; height: 30px; margin-left: 15px;" v-bind:style="{background : item.value}"></button></v-list-tile-title>
@@ -149,8 +125,12 @@
                           </v-card-row>
                           <v-card-row>
                             <v-card-text>
-                              <input type="color" value="currentCouleur.value" name="currentCouleur.name" v-model="currentCouleur.value"></input>
-                        
+                              <v-text-field
+                                      label="Nom"
+                                      v-model="couleur.nom"
+                                      required
+                              ></v-text-field>
+                              <input type="color" value="currentCouleur.value" name="currentCouleur.name" v-model="currentCouleur.value">
                             </v-card-text>
                           </v-card-row>
                           <v-card-row actions>
@@ -178,13 +158,17 @@
                 </v-card-row>
                 <v-card-row>
                   <v-card-text>
-                   <input type="color" value="" name="" v-model="couleur.value"></input>
-                  
+                    <v-text-field
+                            label="Nom"
+                            v-model="couleur.nom"
+                            required
+                    ></v-text-field>
+                    <input type="color" value="" name="" v-model="couleur.value">
                   </v-card-text>
                 </v-card-row>
                 <v-card-row actions>
                   <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Annuler</v-btn>
-                  <v-btn class="blue--text darken-1" flat @click.native="addCouleur">Enregistrer</v-btn>
+                  <v-btn class="blue--text darken-1" flat @click.native="addCouleur()">Enregistrer</v-btn>
                 </v-card-row>
               </v-card>
             </v-dialog>

@@ -5,13 +5,11 @@ let vm = new Vue({
                 baseUrlProduit: "https://transfertprod-668c2.firebaseio.com/produitList.json",
                 baseUrlEditProduit: "https://transfertprod-668c2.firebaseio.com/produitList/",
                 baseUrlCouleur: "https://transfertprod-668c2.firebaseio.com/couleurList.json",
-                baseUrlStyle: "https://transfertprod-668c2.firebaseio.com/styleList.json",
                 baseUrlGamme: "https://transfertprod-668c2.firebaseio.com/gammeList.json",
                 baseUrlImgList: "https://transfertprod-668c2.firebaseio.com/imglist.json",
                 baseUrlClient: "https://transfertprod-668c2.firebaseio.com/client.json",
                 dialog: false,
                 couleurList: [],
-                styleList: [],
                 gammeList: [],
                 visual: false,
                 seeVisual: false,
@@ -41,16 +39,16 @@ let vm = new Vue({
                 mode: '',
                 timeout: 3000,
                 successtext: "Enregistrement du produit effectué avec succés",
-                edittextsuccess: "Enregistrement de vos modifications effectué avec succés",
+                edittextsuccess: "Vos modifications ont bien été prises en compte",
                 deletesuccess: 'Le produit à été supprimée avec succés',
                 produit: {
                     gamme: "",
                     genre: "",
-                    style: "",
                     couleur: [],
                     visuel: [],
                     poid: "",
                     prix: "",
+                    printfacepossible: false,
                     isActive : false,
                     prixpromotion: "",
                     tailles : []
@@ -58,14 +56,16 @@ let vm = new Vue({
                 },
                 headers: [
                     {text: 'Gamme', value: 'gamme'},
-                    {text: 'Style', value: 'style'},
                     {text: 'Couleur', value: 'couleur'},
                     {text: 'Visuel', value: 'visuel'},
                     {text: 'Poid', value: 'poid'},
-                    {text: 'Prix', value: 'prix'},
+                    {text: 'Prix (ttc)', value: 'prix'},
                     {text : 'Prix promotion', value : 'prixpromotion'},
                     {text: "Action", value: ""}
                 ],
+                faceavant: "",
+                facearriere: "",
+                cote: "",
                 items: [],
                 currentCouleur: {},
                 couleursList: [],
@@ -79,6 +79,7 @@ let vm = new Vue({
              * Ajoute un produit en base de donnée.
              */
             addProduit: function (event) {
+                this.produit.visuel = [this.faceavant, this.facearriere, this.cote];
                 vm.checkForm();
                 if (vm.errorArray.length > 0) {
                     vm.formSnackbar = true;
@@ -94,13 +95,12 @@ let vm = new Vue({
                             nom: "",
                             gamme: "",
                             genre: "",
-                            style: "",
                             couleur: [],
                             visuel: [],
                             poid: "",
                             prix: "",
                             isActive : false
-                        },
+                        }
                             vm.imgList.forEach(function (img) {
                                 img.isActive = false;
                             });
@@ -153,9 +153,6 @@ let vm = new Vue({
                 if (vm.produit.genre === "") {
                     vm.errorArray.push("Genre")
                 }
-                if (vm.produit.style === "") {
-                    vm.errorArray.push("Style");
-                }
                 if (vm.produit.prix === "") {
                     vm.errorArray.push("Prix");
                 }
@@ -179,19 +176,8 @@ let vm = new Vue({
              */
             getAllImage: function (event) {
                 return this.$http.get(vm.baseUrlImgList).then((img) => {
-                    Object.keys(img.data).forEach((key) => {
+                    Object.keys(img.body).forEach((key) => {
                         vm.imgList.push({base64: img.data[key].base64});
-                    })
-                    console.log(vm.imgList)
-                })
-            },
-            /**
-             * Récupére l'ensemble des styles en base de donnée.
-             */
-            getAllStyle: function (event) {
-                return this.$http.get(vm.baseUrlStyle).then((style) => {
-                    Object.keys(style.data).forEach(function (key) {
-                        vm.styleList.push(style.data[key].name);
                     });
                 })
             },
@@ -231,7 +217,9 @@ let vm = new Vue({
                 $event.stopPropagation();
                 vm.dialog = true;
                 vm.produit = currentProduit;
-                console.log(vm.produit);
+                this.faceavant = this.produit.visuel[0];
+                this.facearriere = this.produit.visuel[1];
+                this.cote = this.produit.visuel[2];
 
             },
             /**
@@ -268,12 +256,15 @@ let vm = new Vue({
                     nom: "",
                     gamme: "",
                     genre: "",
-                    style: "",
                     couleur: [],
                     visuel: [],
                     poid: "",
-                    prix: ""
+                    prix: "",
+                    tailles : []
                 };
+                this.faceavant = "";
+                this.facearriere = "";
+                this.cote = "";
                 vm.imgList.forEach(function (img) {
                     img.isActive = false;
                 })
@@ -305,6 +296,5 @@ let vm = new Vue({
 
 vm.getAllCouleur();
 vm.getAllGamme();
-vm.getAllStyle();
 vm.getAllImage();
 vm.getAllProduit();

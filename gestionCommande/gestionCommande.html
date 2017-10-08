@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Protoyping param-screen</title>
+
+
+    <link rel='stylesheet prefetch'
+          href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
+    <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
+    <link rel="stylesheet" href="
+https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.css">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="app">
+    <v-app id="inspire">
+        <v-navigation-drawer persistent light v-model="drawer">
+            <v-list @click.native.stop="mini = !mini">
+                <v-list-item>
+                    <v-list-tile>
+                        <v-list-tile-action>
+                            <v-icon>build</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <a href="../gestionGamme/gestionGammes.html">Gestion des gammes</a>
+                            </v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-tile>
+                        <v-list-tile-action>
+                            <v-icon>invert_colors</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <a href="../gestionCouleur/gestionCouleur.html"> Gestion des couleurs</a>
+                            </v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list-item>
+
+
+                <v-divider></v-divider>
+                <v-list-item>
+                    <v-list-tile>
+                        <v-list-tile-action>
+                            <v-icon>note_add</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <a href="../gestionProduit/gestionProduit.html"> Gestion des produits</a>
+                            </v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list-item>
+
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>store</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a href="../gestionCommande/gestionCommande.html">Suivi des commandes</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                </v-list-item>
+
+            </v-list>
+        </v-navigation-drawer>
+        <v-toolbar fixed class="grey darken-3" light>
+            <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-title>Suivi des commandes</v-toolbar-title>
+        </v-toolbar>
+        <template>
+            <main class="linear">
+                <v-container fluid>
+                    <template>
+                        <v-card>
+                            <v-card-title>
+                                Liste des commandes
+                                <v-spacer></v-spacer>
+                                <v-text-field
+                                        append-icon="search"
+                                        label="Rechercher une commande..."
+                                        single-line
+                                        hide-details
+                                        v-model="search"
+                                ></v-text-field>
+                            </v-card-title>
+                            <v-data-table
+                                    v-bind:headers="headers"
+                                    v-bind:items="items"
+                                    v-bind:search="search"
+                            >
+                                <template slot="items" scope="props">
+                                    <td class="text-xs-right">{{ props.item.reference }}</td>
+                                    <td class="text-xs-right">{{ props.item.customerInformation.firstname }} {{
+                                        props.item.customerInformation.name }}
+                                    </td>
+                                    <td class="text-xs-right">{{ props.item.date }}</td>
+                                    <td class="text-xs-right">{{ props.item.state }}</td>
+                                    <td class="text-xs-right">
+                                        <v-btn @click.native="getCurrentOrder(props.item)" secondary light>Éditer</v-btn>
+                                        <template>
+                                            <v-layout row justify-center>
+                                                <v-dialog v-model="dialog" persistent width="50%" scrollable>
+                                                    <v-card>
+                                                        <v-card-title>
+                                                            <span class="headline">Commande {{currentOrder.reference}}</span>
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-container grid-list-md>
+                                                                <v-layout wrap>
+
+                                                                    <v-flex xs12>
+                                                                        <template>
+                                                                            <v-expansion-panel>
+                                                                                <v-expansion-panel-content v-for="content in currentOrder.content">
+                                                                                    <div slot="header">{{content.gamme}}</div>
+                                                                                    <v-card style="height : 300px;">
+                                                                                        <v-card-text class="grey lighten-3">
+                                                                                            <v-list-tile>
+                                                                                                <v-list-tile-content>
+                                                                                                    <v-list-tile-title> Sexe : {{content.gender}}</v-list-tile-title>
+
+                                                                                                </v-list-tile-content>
+                                                                                            </v-list-tile>
+                                                                                            <v-list-tile>
+                                                                                                <v-list-tile-content>
+                                                                                                    <v-list-tile-title> Quantité : {{content.quantity}}</v-list-tile-title>
+
+                                                                                                </v-list-tile-content>
+                                                                                            </v-list-tile>
+                                                                                            <v-list-tile>
+                                                                                                <v-list-tile-content>
+                                                                                                    <v-list-tile-title> Taille : {{content.size}}</v-list-tile-title>
+
+                                                                                                </v-list-tile-content>
+                                                                                            </v-list-tile>
+                                                                                            <v-list-tile>
+                                                                                                <v-list-tile-content>
+                                                                                                    <v-list-tile-title> Style : {{content.style}}</v-list-tile-title>
+
+                                                                                                </v-list-tile-content>
+                                                                                            </v-list-tile>
+                                                                                            <v-list-tile>
+                                                                                                <v-list-tile-content>
+                                                                                                    <v-list-tile-title> Couleur : {{content.color}}</v-list-tile-title>
+
+                                                                                                </v-list-tile-content>
+                                                                                            </v-list-tile>
+                                                                                        </v-card-text>
+                                                                                    </v-card>
+                                                                                    <v-btn light full secondary>visuel global</v-btn>
+                                                                                    <v-btn light full secondary>visuel personnalisé</v-btn>
+                                                                                </v-expansion-panel-content>
+                                                                            </v-expansion-panel>
+                                                                        </template>
+                                                                        <br>
+                                                                        <v-select
+                                                                                label="État de la commande"
+                                                                                required
+                                                                                v-model="currentOrder.state"
+                                                                                :items="['En cours de préparation', 'En cours de livraison', 'Livré']"
+                                                                        ></v-select>
+                                                                    </v-flex>
+                                                                </v-layout>
+                                                            </v-container>
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Fermer</v-btn>
+                                                            <v-btn class="blue--text darken-1" flat @click.native="updateOrderState()">Enregistrer</v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </v-layout>
+                                        </template>
+                                    </td>
+                                </template>
+                                <template slot="pageText" scope="{ pageStart, pageStop }">
+                                    From {{ pageStart }} to {{ pageStop }}
+                                </template>
+                            </v-data-table>
+                        </v-card>
+                    </template>
+
+                </v-container>
+
+        </template>
+    </v-app>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/fr.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.js"></script>
+<script src='https://unpkg.com/vue/dist/vue.js'></script>
+<script src='../js/vuetify.min.js'></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
+
+<script src="gestionCommandeCtrl.js"></script>
+
+</body>
+
+</html>

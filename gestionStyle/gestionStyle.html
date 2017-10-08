@@ -16,7 +16,10 @@
   a {
     text-decoration: none;
     color: black;
-  };
+  }
+  .btn {
+    min-width: 0px!important;
+  }
 </style>
 
 </head>
@@ -123,30 +126,9 @@
                   <v-list-tile-content>
                     <v-list-tile-title>{{ item.name }}</v-list-tile-title>
                   </v-list-tile-content>
-                  <v-list-tile-action>
-                    <v-icon>keyboard_arrow_down</v-icon>
-                  </v-list-tile-action>
+                    <v-btn small class="grey--text darken-1" flat @click.native="deleteStyle($event, item)"><i class="material-icons">delete</i></v-btn>
+                    <v-btn small class="grey--text darken-1" flat @click.native="getCurrentStyle($event, item)"><i class="material-icons">mode_edit</i></v-btn>
                 </v-list-tile>
-                <v-list-item>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title>
-                        <v-btn class="blue--text darken-1" flat @click.native="deleteStyle($event, item)"><i class="material-icons">delete</i> Supprimer</v-btn>
-                      </v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                    
-                        <v-btn @click.native="getCurrentStyle($event, item)" class="blue--text darken-1" flat slot="activator">
-                          <v-list-tile-title><i class="material-icons">mode_edit</i> Editer</v-list-tile-title>
-                        </v-btn>
-                
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-list-item>
               </v-list-group>
             </v-list>
             <v-dialog v-model="dialog">

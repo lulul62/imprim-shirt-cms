@@ -9,6 +9,8 @@
   <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
   <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
   <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+  <link rel="stylesheet" href="
+https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.css">
   <meta name="viewport" content="width=device-width, user-scalable=no">
 
   <link rel="stylesheet" href="../css/style.css">
@@ -17,6 +19,9 @@
   a {
     text-decoration: none;
     color: black;
+  }
+  .btn {
+    min-width: 0px!important;
   }
 </style>
 
@@ -51,31 +56,6 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-item>
-          <v-list-item>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>stars</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionStyle/gestionStyle.html">Gestion des styles</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-item>
-
-           <v-list-item>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon>get_app</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  <a href="../gestionVisuel/gestionVisuel.html">Gestion des visuels</a>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-item>
 
 
            <v-divider></v-divider>
@@ -98,7 +78,7 @@
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>
-                Suivi des commandes
+                <a href="../gestionCommande/gestionCommande.html">Suivi des commandes</a>
               </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
@@ -125,30 +105,23 @@
                   <v-list-tile-content>
                     <v-list-tile-title>{{ item.name }}</v-list-tile-title>
                   </v-list-tile-content>
-                  <v-list-tile-action>
-                    <v-icon>keyboard_arrow_down</v-icon>
-                  </v-list-tile-action>
+                  <template>
+                    <v-layout row justify-center>
+                      <v-dialog v-model="deleteDialog" persistent>
+                        <v-card>
+                          <v-card-text>Etes-vous sur de vouloir supprimer cette gamme ? </v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn class="green--text darken-1" flat="flat" @click.native="deleteCurrentGamme()">Confirmer</v-btn>
+                            <v-btn class="green--text darken-1" flat="flat" @click.native="deleteDialog = false">Annuler</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-layout>
+                  </template>
+                    <v-btn small class="grey--text darken-1" flat @click.native="getCurrentGammeToDelete($event, item)"><i class="material-icons">delete</i></v-btn>
+                  <v-btn small class="grey--text darken-1" flat @click.native="getCurrentGamme($event, item)"><i class="material-icons">mode_edit</i></v-btn>
                 </v-list-tile>
-                <v-list-item>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title>
-                        <v-btn class="blue--text darken-1" flat @click.native="deleteGamme($event, item)"><i class="material-icons">delete</i> Supprimer</v-btn>
-                      </v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      
-                        <v-btn @click.native="getCurrentGamme($event, item)" class="blue--text darken-1" flat slot="activator">
-                          <v-list-tile-title><i class="material-icons">mode_edit</i> Editer</v-list-tile-title>
-                        </v-btn>
-              
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-list-item>
               </v-list-group>
             </v-list>
             <v-dialog v-model="dialog">
@@ -197,13 +170,15 @@
               <v-btn flat class="yellow--text" @click.native="deletesnackbar = false">Fermer</v-btn>
             </v-snackbar>
             </v-card>
-
+          </v-container>
+        </main>
       </template>
     </v-app>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src='https://unpkg.com/vue/dist/vue.js'></script>
   <script src='../js/vuetify.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   <script src="gestionGammesCtrl.js"></script>
