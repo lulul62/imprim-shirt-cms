@@ -48,7 +48,7 @@ let vm = new Vue({
                     visuel: [],
                     poid: "",
                     prix: "",
-                    printfacepossible: false,
+                    printfacepossible: true,
                     isActive : false,
                     prixpromotion: "",
                     tailles : []
@@ -59,8 +59,8 @@ let vm = new Vue({
                     {text: 'Couleur', value: 'couleur'},
                     {text: 'Visuel', value: 'visuel'},
                     {text: 'Poid', value: 'poid'},
-                    {text: 'Prix (ttc)', value: 'prix'},
-                    {text : 'Prix promotion', value : 'prixpromotion'},
+                    {text: 'Prix (TTC)', value: 'prix'},
+                    {text : 'Prix promotion (TTC)', value : 'prixpromotion'},
                     {text: "Action", value: ""}
                 ],
                 faceavant: "",
@@ -248,7 +248,7 @@ let vm = new Vue({
             /**
              * Ferme la modal et annule toute les actions relatives à celle ci
              */
-            cancelAction: function () {
+            cancelAction() {
                 vm.dialog = false;
                 vm.editModalTitle = false;
                 vm.createModalTitle = true;
@@ -260,6 +260,7 @@ let vm = new Vue({
                     visuel: [],
                     poid: "",
                     prix: "",
+                    printfacepossible: true,
                     tailles : []
                 };
                 this.faceavant = "";

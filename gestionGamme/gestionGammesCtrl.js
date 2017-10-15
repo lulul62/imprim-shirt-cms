@@ -21,7 +21,7 @@ let vm = new Vue({
                 emptyFormText: "Le champs de nom de la gamme est obligatoire.",
                 successtext: "Enregistrement de la gamme effectué avec succés",
                 edittextsuccess: "Vos modifications ont bien été prises en compte",
-                deletesuccess: 'La gamme à été supprimé avec succés',
+                deletesuccess: 'La gamme a été supprimée avec succès',
                 gamme: {
                     name: ""
                 },

@@ -21,7 +21,7 @@ let vm = new Vue({
                 deletesuccess: 'La couleur à été supprimée avec succés',
                 couleur: {
                     value: "",
-                    name: ""
+                    nom: ""
                 },
                 currentCouleur: {},
                 couleursList: [],
@@ -33,11 +33,12 @@ let vm = new Vue({
              * Ajoute une couleur en base de donnée.
              */
             addCouleur() {
-                console.log("je passe");
+                console.log(vm.couleur);
                 if (vm.couleur.value === "") {
                     return vm.emptyForm = true;
                 }
-                this.$http.post(vm.baseUrlCouleur, vm.couleur).then((resp) => {
+                console.log("je passe 2");
+                this.$http.post(vm.baseUrlCxouleur, vm.couleur).then((resp) => {
                     vm.couleur.key = resp.body.name;
                     return this.$http.put(vm.baseUrlEditCouleur + resp.body.name + '.json', vm.couleur).then((resp) => {
                         vm.couleur = {};
@@ -69,13 +70,13 @@ let vm = new Vue({
              * Edit de la couleur selectionné par l'utilisateur.
              */
             editCouleur: function ($event, currentCouleur) {
-                if (vm.currentCouleur.name === "") {
+                if (vm.currentCouleur.nom === "") {
                     return vm.emptyForm = true;
                 }
                 return this.$http.put(vm.baseUrlEditCouleur + vm.currentCouleur.key + ".json", vm.currentCouleur).then((resp) => {
                     vm.edit = false;
                     vm.editsnackbar = true;
-                    vm.currentCouleur = "";
+                    vm.currentCouleur = {};
                     return vm.getAllCouleurs();
                 });
             },
@@ -87,6 +88,7 @@ let vm = new Vue({
                 (function () {
                     vm.edit = true;
                     vm.currentCouleur = currentCouleur;
+                    console.log(vm.currentCouleur);
                 }, 0)
             }
         }

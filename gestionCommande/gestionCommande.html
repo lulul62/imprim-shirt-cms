@@ -119,7 +119,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                         <v-btn @click.native="getCurrentOrder(props.item)" secondary light>Éditer</v-btn>
                                         <template>
                                             <v-layout row justify-center>
-                                                <v-dialog v-model="dialog" persistent width="50%" scrollable>
+                                                <v-dialog v-model="dialog" persistent width="400px" scrollable>
                                                     <v-card>
                                                         <v-card-title>
                                                             <span class="headline">Commande {{currentOrder.reference}}</span>
@@ -153,22 +153,28 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
 
                                                                                                 </v-list-tile-content>
                                                                                             </v-list-tile>
-                                                                                            <v-list-tile>
-                                                                                                <v-list-tile-content>
-                                                                                                    <v-list-tile-title> Style : {{content.style}}</v-list-tile-title>
-
-                                                                                                </v-list-tile-content>
-                                                                                            </v-list-tile>
-                                                                                            <v-list-tile>
-                                                                                                <v-list-tile-content>
-                                                                                                    <v-list-tile-title> Couleur : {{content.color}}</v-list-tile-title>
-
-                                                                                                </v-list-tile-content>
-                                                                                            </v-list-tile>
+                                                                                            <v-card center
+                                                                                                    height="300px">
+                                                                                                <v-card-text
+                                                                                                        style="background: #eee;height: 300px">
+                                                                                                    <div id="visual">
+                                                                                                        <div id="shirtDiv"
+                                                                                                             class="page"
+                                                                                                             style="position: relative; background : #eee">
+                                                                                                            <img style
+                                                                                                                 id="tshirtFacing"
+                                                                                                                 v-bind:style="{background : content.color, position : 'absolute', height: '300px'}"
+                                                                                                                 v-bind:src="content.visual.shape">
+                                                                                                            <div style="width: 200px;height: 400px;">
+                                                                                                                <img style="left: 75px; top: 4em;width: 100px;  position: absolute;
+   " v-bind:src="content.visual.design">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </v-card-text>
+                                                                                            </v-card>
                                                                                         </v-card-text>
                                                                                     </v-card>
-                                                                                    <v-btn light full secondary>visuel global</v-btn>
-                                                                                    <v-btn light full secondary>visuel personnalisé</v-btn>
                                                                                 </v-expansion-panel-content>
                                                                             </v-expansion-panel>
                                                                         </template>

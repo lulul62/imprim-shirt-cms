@@ -57,8 +57,9 @@ let vm = new Vue({
                     }
 
                     orders.forEach(order => {
+                        console.log(order);
                         if (order.date === undefined) {
-                            order.date = moment(order.date).format('DD-MM-YYYY');
+                            order.date = moment(order.order_date).format('DD-MMM-YYYY');
                         }
                     });
 
@@ -86,10 +87,11 @@ let vm = new Vue({
                 let orderKey = this.currentOrder.key;
                 delete this.currentOrder.key;
                 delete this.currentOrder.date;
+                this.$http.delete(this.constant.BASE_URL_USER + this.currentOrder.customerInformation.userkey + "/orders/" + orderKey + '.json');
                 return this.$http.put(this.constant.BASE_URL_USER + this.currentOrder.customerInformation.userkey + "/orders/" + orderKey + '.json', this.currentOrder).then(resp => {
-                    swal('', 'Mise à jour de la commande réalisé avec succés', 'success');
+                    swal('', 'Les informations de la commande ' + this.currentOrder.reference +' ont été mises à jour avec succès.', 'success');
                     this.dialog = false;
-                    return this.getAllOrders();
+                     this.getAllOrders();
                 }, (err) => {
                     swal('', 'Erreur lors de la mise à jour de la commande', 'error');
                     return this.dialog = false;

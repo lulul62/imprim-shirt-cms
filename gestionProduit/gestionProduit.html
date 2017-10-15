@@ -113,7 +113,7 @@
                     <v-layout row justify-space-around>
 
 
-                        <template>
+                        <center>
                             <v-card>
                                 <v-card-title>
                                     Produits
@@ -189,7 +189,7 @@
                                         </td>
                                         <td class="text-xs-right">{{ props.item.poid }}</td>
                                         <td class="text-xs-right">{{ props.item.prix }} €</td>
-                                        <td class="text-xs-right">{{ props.item.prixpromotion }}</td>
+                                        <td class="text-xs-right">{{ props.item.prixpromotion }} €</td>
                                         <td class="text-xs-right">
                                             <v-btn @click.native="deleteProduit($event, props.item)" icon ripple>
                                                 <v-icon class="grey--text text--lighten-1">delete</v-icon>
@@ -205,7 +205,7 @@
                                     </template>
                                 </v-data-table>
                             </v-card>
-                            <v-dialog v-model="dialog" fullscreen scrollable transition="v-dialog-bottom-transition"
+                            <v-dialog fullscreen v-model="dialog" scrollable transition="v-dialog-bottom-transition"
                                       :overlay=false>
 
                                 <v-btn style=" position: fixed;
@@ -213,15 +213,16 @@
     bottom: 30px;" slot="activator" floating class="grey darken-2">
                                     <v-icon light>add</v-icon>
                                 </v-btn>
+
                                 <v-card>
                                     <v-card-row>
                                         <v-toolbar light>
                                             <v-btn icon="icon" @click.native="cancelAction" light>
                                                 <v-icon>close</v-icon>
                                             </v-btn>
-                                            <v-toolbar-title v-if="createModalTitle === true">Ajouter un produit
+                                            <v-toolbar-title v-if="createModalTitle === true">
                                             </v-toolbar-title>
-                                            <v-toolbar-title v-if="editModalTitle === true">Editer un produit
+                                            <v-toolbar-title v-if="editModalTitle === true">
                                             </v-toolbar-title>
                                             <v-btn v-if="createModalTitle === true" light flat
                                                    @click.native="addProduit">Enregistrer
@@ -256,12 +257,18 @@
                                     </v-card-row>
 
                                     <template>
+                                        <v-flex 12>
                                         <v-text-field type="text" label="Face avant"
                                                       v-model="faceavant" required></v-text-field>
+                                        </v-flex>
+                                        <v-flex 12>
                                         <v-text-field type="text" label="Face arrière"
                                                       v-model="facearriere" required></v-text-field>
+                                        </v-flex>
+                                            <v-flex 12>
                                         <v-text-field type="text" label="Coté"
                                                       v-model="cote" required></v-text-field>
+                                            </v-flex>
                                     </template>
                                     <v-divider></v-divider>
                                     <v-list three-line subheader>
@@ -271,17 +278,17 @@
                                                 <v-layout row wrap>
                                                     <v-flex xs6>
                                                         <v-select v-bind:items="gammeList" v-model="produit.gamme"
-                                                                  label="Selectionner une gamme" dark single-line
+                                                                  label="Gamme" dark single-line
                                                                   auto></v-select>
                                                     </v-flex>
                                                     <v-flex xs6>
-                                                        <v-select label="Selectionner les couleurs"
+                                                        <v-select label="Couleurs"
                                                                   v-bind:items="couleurList" v-model="produit.couleur"
                                                                   multiple dark max-height="400"
                                                                   persistent-hint></v-select>
                                                     </v-flex>
                                                     <v-flex xs6>
-                                                        <v-select label="Selectionner les tailles disponibles"
+                                                        <v-select label="Tailles"
                                                                   v-bind:items="tailles" v-model="produit.tailles"
                                                                   multiple dark max-height="400"
                                                                   persistent-hint></v-select>
@@ -289,7 +296,7 @@
 
                                                     <v-flex xs6>
                                                         <v-select v-bind:items="genreList" v-model="produit.genre"
-                                                                  label="Selectionner un genre" dark single-line
+                                                                  label="Genre" dark single-line
                                                                   auto></v-select>
                                                     </v-flex>
                                                     <v-flex xs6>
@@ -298,19 +305,19 @@
                                                     </v-flex>
                                                     <v-flex xs6>
                                                         <v-text-field type="number" step="0.01"
-                                                                      label="Prix (euros - ttc)"
+                                                                      label="Prix (euros - TTC)"
                                                                       v-model="produit.prix" required></v-text-field>
 
                                                     </v-flex>
                                                     <v-flex xs6>
-                                                        <v-text-field type="number" step="0.01" label="Prix promotion"
+                                                        <v-text-field type="number" step="0.01" label="Prix promotion (euros - TTC)"
                                                                       v-model="produit.prixpromotion"
                                                                       required></v-text-field>
 
 
                                                     </v-flex>
                                                     <v-flex xs6>
-                                                        <v-checkbox label="Impression face possible ?"
+                                                        <v-checkbox label="Impression face ?"
                                                                     v-model="produit.printfacepossible"
                                                                     dark></v-checkbox>
                                                     </v-flex>
@@ -330,6 +337,7 @@
                                     </v-list>
                                 </v-card>
                             </v-dialog>
+                        </center>
                         </template>
 
 
