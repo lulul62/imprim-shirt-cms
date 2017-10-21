@@ -4,6 +4,7 @@ let vm = new Vue({
             return {
                 baseUrlGamme: "https://transfertprod-668c2.firebaseio.com/gammeList.json",
                 baseUrlEditGamme: "https://transfertprod-668c2.firebaseio.com/gammeList/",
+                baseUrlProduit: "https://transfertprod-668c2.firebaseio.com/produitList.json",
                 dialog: false,
                 editModalGamme: false,
                 createModalGamme: true,
@@ -25,12 +26,18 @@ let vm = new Vue({
                 gamme: {
                     name: ""
                 },
+                product : [],
                 gammeToDelete: {},
                 currentGamme: {},
                 gammeList: [],
                 mini: false,
 
             }
+        },
+        mounted() {
+            this.getAllProduit();
+            this.getAllGamme();
+
         },
         methods: {
             /**
@@ -59,6 +66,17 @@ let vm = new Vue({
                 })
             },
             /**
+             * Récupére l'ensemble des produits en base de donnée.
+             */
+            getAllProduit: function (event) {
+                return this.$http.get(vm.baseUrlProduit).then((resp) => {
+                    Object.keys(resp.data).forEach((key) => {
+                        this.product.push(resp.data[key]);
+                    })
+                    console.log(this.product);
+                })
+            },
+            /**
              * Supprime la gamme cliqué par l'utilisateur.
              */
             getCurrentGammeToDelete: function ($event, currentGamme) {
@@ -72,6 +90,9 @@ let vm = new Vue({
              */
             deleteCurrentGamme() {
                 "use strict";
+                if (_.find(this.product, {'gamme': vm.gammeToDelete.name}) !== undefined) {
+                    return swal('', 'Il est impossible de supprimer une gamme utilisée par un produit', 'error');
+                }
                 return this.$http.delete(vm.baseUrlEditGamme + vm.gammeToDelete.key + '.json').then(resp => {
                     this.getAllGamme();
                     vm.deletesnackbar = true;
@@ -112,3 +133,4 @@ let vm = new Vue({
 );
 
 vm.getAllGamme();
+vm.getAllProduit();

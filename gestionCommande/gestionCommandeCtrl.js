@@ -47,17 +47,12 @@ let vm = new Vue({
                 return this.$http.get(this.constant.BASE_URL_ORDERS).then(resp => {
                     let orders = [];
                     for (let key in resp.data) {
-                        for (let orderKey in resp.data[key].orders) {
+                        for (var orderKey in resp.data[key].orders) {
                             orders.push(resp.data[key].orders[orderKey]);
-                            orders.forEach((order) => {
-                                order['key'] = orderKey;
-                            })
-
                         }
                     }
 
                     orders.forEach(order => {
-                        console.log(order);
                         if (order.date === undefined) {
                             order.date = moment(order.order_date).format('DD-MMM-YYYY');
                         }
@@ -83,15 +78,18 @@ let vm = new Vue({
              * @returns {Promise.<TResult>}
              */
             updateOrderState() {
-                "use strict";
-                let orderKey = this.currentOrder.key;
-                delete this.currentOrder.key;
                 delete this.currentOrder.date;
-                this.$http.delete(this.constant.BASE_URL_USER + this.currentOrder.customerInformation.userkey + "/orders/" + orderKey + '.json');
-                return this.$http.put(this.constant.BASE_URL_USER + this.currentOrder.customerInformation.userkey + "/orders/" + orderKey + '.json', this.currentOrder).then(resp => {
-                    swal('', 'Les informations de la commande ' + this.currentOrder.reference +' ont été mises à jour avec succès.', 'success');
+                fetch(this.constant.BASE_URL_USER + this.currentOrder.customerInformation.userkey + '/orders/' + this.currentOrder.key + '.json', {
+                    method: 'PUT',
+                    body: JSON.stringify(this.currentOrder),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    }
+                }).then(res => {
+                    swal('', 'Les informations de la commande ' + this.currentOrder.reference + ' ont été mises à jour avec succès.', 'success');
                     this.dialog = false;
-                     this.getAllOrders();
+                    this.getAllOrders();
                 }, (err) => {
                     swal('', 'Erreur lors de la mise à jour de la commande', 'error');
                     return this.dialog = false;

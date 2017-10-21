@@ -159,6 +159,7 @@
     <script src='https://unpkg.com/vue/dist/vue.js'></script>
     <script src='js/vuetify.min.js'></script>
     <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
+
     <script src="js/index.js"></script>
 
 </body>

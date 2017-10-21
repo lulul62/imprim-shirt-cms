@@ -33,12 +33,10 @@ let vm = new Vue({
              * Ajoute une couleur en base de donnée.
              */
             addCouleur() {
-                console.log(vm.couleur);
                 if (vm.couleur.value === "") {
                     return vm.emptyForm = true;
                 }
-                console.log("je passe 2");
-                this.$http.post(vm.baseUrlCxouleur, vm.couleur).then((resp) => {
+                this.$http.post(vm.baseUrlCouleur, vm.couleur).then((resp) => {
                     vm.couleur.key = resp.body.name;
                     return this.$http.put(vm.baseUrlEditCouleur + resp.body.name + '.json', vm.couleur).then((resp) => {
                         vm.couleur = {};
