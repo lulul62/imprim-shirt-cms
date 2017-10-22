@@ -9,6 +9,8 @@
     <link rel='stylesheet prefetch'
           href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
     <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
+    <link rel="stylesheet" href="
+https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.css">
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <link rel="stylesheet" href="../css/style.css">
     <style>
@@ -313,7 +315,7 @@
 
                                                     </v-flex>
                                                     <v-flex xs6>
-                                                        <v-checkbox label="Impression face ?"
+                                                        <v-checkbox label="Impression face"
                                                                     v-model="produit.printfacepossible"
                                                                     dark></v-checkbox>
                                                     </v-flex>
@@ -345,12 +347,6 @@
         </v-snackbar>
         <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'"
                     :left="x === 'left'" :multi-line="mode === 'multi-line'"
-                    :vertical="mode === 'vertical'" v-model="formSnackbar">
-            Les champs suivants sont manquants ou incorrect : {{ notificationError }}
-
-        </v-snackbar>
-        <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'"
-                    :left="x === 'left'" :multi-line="mode === 'multi-line'"
                     :vertical="mode === 'vertical'" v-model="editsnackbar">
             {{ edittextsuccess }}
             <v-btn flat class="yellow--text" @click.native="editsnackbar = false">Fermer</v-btn>
@@ -366,6 +362,7 @@
 <script src='https://unpkg.com/vue/dist/vue.js'></script>
 <script src='../js//vuetify.min.js'></script>
 <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="gestionProduit.js"></script>
 
