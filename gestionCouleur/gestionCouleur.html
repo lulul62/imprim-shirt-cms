@@ -8,7 +8,8 @@
 
   <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
   <link rel='stylesheet prefetch' href='../js/vuetify.min.css'>
-  <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+  <link rel="stylesheet" href="
+https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.css">
   <meta name="viewport" content="width=device-width, user-scalable=no">
 
   <link rel="stylesheet" href="../css/style.css">
@@ -101,32 +102,18 @@
                     <v-list-tile-title>
                     {{item.nom}} - {{item.value}}<button  style="width: 100%; height: 5px; margin-left: 30px;" v-bind:style="{background : item.value}"></button></v-list-tile-title>
                   </v-list-tile-content>
-                          <v-btn class="grey--text darken-1" flat @click.native="deleteCouleur($event, item)"><i class="material-icons">delete</i></v-btn>
+                          <v-btn class="grey--text darken-1" flat @click.native="showDeleteModal($event, item)"><i class="material-icons">delete</i></v-btn>
+                  <v-dialog v-model="deleteModal">
+                    <v-card>
+                      <v-card-text>Souhaitez vous réellement supprimer cette couleur ? </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" flat="flat" @click.native="deleteCouleur()">Confimer</v-btn>
+                        <v-btn color="green darken-1" flat="flat" @click.native="deleteModal = false">Annuler</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
 
-                    <v-dialog  v-model="edit" persistent>
-                      <v-btn @click.native="getCurrentCouleur($event, item)" class="grey--text darken-1" flat slot="activator">
-                        <v-list-tile-title><i class="material-icons">mode_edit</i></v-list-tile-title>
-                      </v-btn>
-                      <v-card>
-                        <v-card-row>
-                          <v-card-title>Editer une couleur</v-card-title>
-                        </v-card-row>
-                        <v-card-row>
-                          <v-card-text>
-                            <v-text-field
-                                    label="Nom"
-                                    v-model="currentCouleur.nom"
-                                    required
-                            ></v-text-field>
-                            <input type="color" value="currentCouleur.value" name="currentCouleur.name" v-model="currentCouleur.value">
-                          </v-card-text>
-                        </v-card-row>
-                        <v-card-row actions>
-                          <v-btn class="blue--text darken-1" flat @click.native="edit = false">Annuler</v-btn>
-                          <v-btn class="blue--text darken-1" flat @click.native="editCouleur($event, item)">Enregistrer</v-btn>
-                        </v-card-row>
-                      </v-card>
-                    </v-dialog>
               </v-list-group>
             </v-list>
             <v-dialog v-model="dialog">
@@ -156,21 +143,6 @@
                 </v-card-row>
               </v-card>
             </v-dialog>
-            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
-              :vertical="mode === 'vertical'" v-model="snackbar">
-              {{ successtext }}
-              <v-btn flat class="yellow--text" @click.native="snackbar = false">Fermer</v-btn>
-            </v-snackbar>
-            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
-              :vertical="mode === 'vertical'" v-model="editsnackbar">
-              {{ edittextsuccess }}
-              <v-btn flat class="yellow--text" @click.native="editsnackbar = false">Fermer</v-btn>
-            </v-snackbar>
-            <v-snackbar :timeout="timeout" :top="y === 'top'" :bottom="y === 'bottom'" :right="x === 'right'" :left="x === 'left'" :multi-line="mode === 'multi-line'"
-              :vertical="mode === 'vertical'" v-model="deletesnackbar">
-              {{ deletesuccess }}
-              <v-btn flat class="yellow--text" @click.native="deletesnackbar = false">Fermer</v-btn>
-            </v-snackbar>
             </v-card>
           </v-container>
         </main>
@@ -180,8 +152,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src='https://unpkg.com/vue/dist/vue.js'></script>
   <script src='../js/vuetify.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   <script src="gestionCouleur.js"></script>
 
 </body>

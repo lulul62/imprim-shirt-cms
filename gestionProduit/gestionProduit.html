@@ -203,7 +203,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                     </template>
                                 </v-data-table>
                             </v-card>
-                            <v-dialog fullscreen v-model="dialog" scrollable transition="v-dialog-bottom-transition"
+                            <v-dialog width="500px" v-model="dialog" scrollable transition="v-dialog-bottom-transition"
                                       :overlay=false>
 
                                 <v-btn style=" position: fixed;
@@ -281,9 +281,10 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                                     </v-flex>
                                                     <v-flex xs6>
                                                         <v-select label="Couleurs"
-                                                                  v-bind:items="couleurList" v-model="produit.couleur"
+                                                                  v-bind:items="couleursList" v-model="produit.couleur"
                                                                   multiple dark max-height="400"
-                                                                  persistent-hint></v-select>
+                                                                  auto></v-select>
+
                                                     </v-flex>
                                                     <v-flex xs6>
                                                         <v-select label="Tailles"
@@ -363,6 +364,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
 <script src='../js//vuetify.min.js'></script>
 <script src="https://cdn.jsdelivr.net/vue.resource/1.2.0/vue-resource.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="gestionProduit.js"></script>
 

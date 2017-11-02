@@ -65,6 +65,7 @@ new Vue({
                 faceavant: "",
                 facearriere: "",
                 cote: "",
+                couleursRef: [],
                 items: [],
                 currentCouleur: {},
                 couleursList: [],
@@ -142,7 +143,11 @@ new Vue({
             getAllCouleur(event) {
                 this.$http.get(this.baseUrlCouleur).then((couleur) => {
                     Object.keys(couleur.data).forEach(key => {
-                        this.couleurList.push(couleur.data[key].value);
+                        this.couleursList.push(couleur.data[key].nom);
+                        this.couleursRef.push({
+                            name: couleur.data[key].nom,
+                            color: couleur.data[key].value
+                        })
                     });
                 })
             },
@@ -183,7 +188,7 @@ new Vue({
                 "use strict";
                 let priceArray = [this.produit.prix, this.produit.prixpromotion];
                 console.log(priceArray);
-                if (priceArray[0].indexOf(".")==-1 || priceArray[1].indexOf(".")==-1) {
+                if (priceArray[0].indexOf(".") == -1 || priceArray[1].indexOf(".") == -1) {
                     this.errorArray.push('Les prix doivent êtres indiqués en decimal');
                 }
             },
@@ -261,6 +266,7 @@ new Vue({
                 this.visualToShow = currentProduit.item.visuel;
             },
 
+
             /**
              * Ferme la modal et annule toute les actions relatives à celle ci
              */
@@ -291,11 +297,18 @@ new Vue({
              */
             showCurrentColorOfProduct($event, currentProduit) {
                 this.couleurToShow = [];
-                currentProduit.item.couleur.forEach((couleur) => {
-                    this.couleurToShow.push({"colorName": couleur});
+                console.log(currentProduit.item.couleur)
+                currentProduit.item.couleur.forEach(colorName => {
+                    let index = _.findIndex(this.couleursRef, { 'name': colorName });
+                    this.couleurToShow.push({colorName : this.couleursRef[index].color})
                 });
+                console.log(this.couleurToShow)
+                return this.couleurToShow
             }
         }
     }
 );
+
+
+
 
