@@ -14,6 +14,7 @@ new Vue({
                 visual: false,
                 seeVisual: false,
                 imgList: [],
+                BASE_URL_USER: "https://transfertprod-668c2.firebaseio.com/user.json",
                 saveModal: false,
                 isLoading: false,
                 createModalTitle: true,
@@ -304,6 +305,75 @@ new Vue({
                 });
                 console.log(this.couleurToShow)
                 return this.couleurToShow
+            },
+
+            /**
+             * Export client json to csv
+             */
+            exportClientToCsv() {
+                let users = [];
+                this.$http.get(this.BASE_URL_USER).then(res => {
+                    Object.keys(res.body).forEach(key => {
+                        users.push({client: res.body[key].email});
+                    })
+                    return this.JSONToCSVConvertor(users, 'Export client', 'client')
+                }, (err) => {
+                    return swal('', 'Erreur interne', 'error')
+                })
+            },
+
+            /**
+             * Converts users JSON to CSV
+             * @param JSONData
+             * @param ReportTitle
+             * @param ShowLabel
+             * @constructor
+             */
+            JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+                let arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+                let CSV = '';
+                if (ShowLabel) {
+                    let row = "";
+                    for (let index in arrData[0]) {
+                        row += index + ',';
+                    }
+                    row = row.slice(0, -1);
+                    CSV += row + '\r\n';
+                }
+
+                for (let i = 0; i < arrData.length; i++) {
+                    let row = "";
+                    //2nd loop will extract each column and convert it in string comma-seprated
+                    for (let index in arrData[i]) {
+                        row += '"' + arrData[i][index] + '",';
+                    }
+                    row.slice(0, row.length - 1);
+                    //add a line break after each row
+                    CSV += row + '\r\n';
+                }
+
+                if (CSV == '') {
+                    alert("Invalid data");
+                    return;
+                }
+
+                let link = document.createElement("a");
+                link.id = "lnkDwnldLnk";
+
+                document.body.appendChild(link);
+
+                let csv = CSV;
+                blob = new Blob([csv], {type: 'text/csv'});
+                let csvUrl = window.URL.createObjectURL(blob);
+                let filename = 'UserExport.csv';
+                $("#lnkDwnldLnk")
+                    .attr({
+                        'download': filename,
+                        'href': csvUrl
+                    });
+
+                $('#lnkDwnldLnk')[0].click();
+                document.body.removeChild(link);
             }
         }
     }

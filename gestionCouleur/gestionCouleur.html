@@ -84,6 +84,26 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
           </v-list-item>
            
         </v-list>
+             <v-list-tile>
+               <v-list-tile-action>
+                 <v-icon>record_voice_over</v-icon>
+               </v-list-tile-action>
+               <v-list-tile-content>
+                 <v-list-tile-title>
+                   <a href="../gestionReclamation/gestionReclamation.html">Réclamations</a>
+                 </v-list-tile-title>
+               </v-list-tile-content>
+             </v-list-tile>
+
+             <v-list-tile>
+               <v-list-tile-action>
+               </v-list-tile-action>
+               <v-list-tile-content>
+                 <v-list-tile-title>
+                   <v-btn @click.native="exportClientToCsv()">Export des clients</v-btn>
+                 </v-list-tile-title>
+               </v-list-tile-content>
+             </v-list-tile>
       </v-navigation-drawer>
       <v-toolbar fixed class="grey darken-3" light>
         <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
