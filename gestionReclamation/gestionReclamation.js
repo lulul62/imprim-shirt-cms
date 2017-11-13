@@ -1,10 +1,10 @@
-new Vue({
+let vm = new Vue({
         el: "#app",
         data() {
             return {
                 drawer: true,
                 BASE_URL_DEMANDS: 'https://transfertprod-668c2.firebaseio.com/demands.json',
-                BASE_URL_MAIL: 'http://localhost:3000/mail',
+                BASE_URL_MAIL: 'http://imprimshirtcli.herokuapp.com/mail',
                 BASE_URL_USER: 'https://transfertprod-668c2.firebaseio.com/user.json',
                 headers: [
                     {text: 'Client', value: 'client'},
@@ -55,8 +55,11 @@ new Vue({
             sendMailResponse() {
                 this.mail.demands = this.currentDemands;
                 this.mail.type = "demands";
+                console.log(this.mail)
+                if (this.mail.message === '') {
+                    return swal('', 'Le champs message est obligatoire', 'error')
+                }
                 this.$http.post(this.BASE_URL_MAIL, this.mail).then(res => {
-
                     this.dialog = false;
                     this.mail = {
                         message: '',
@@ -70,81 +73,75 @@ new Vue({
             },
 
             /**
-             * delete
-             */
-            deleteDemands() {
-
-
-            },
-
-            /**
              * Export client json to csv
              */
             exportClientToCsv() {
-                let users = [];
+                vm.usersToExport = [];
                 this.$http.get(this.BASE_URL_USER).then(res => {
                     Object.keys(res.body).forEach(key => {
-                        users.push({client: res.body[key].email});
+                        vm.usersToExport.push({
+                            client: res.body[key].name + ' ' + res.body[key].firstname,
+                            email: res.body[key].email
+                        });
                     })
-                    return this.JSONToCSVConvertor(users, 'Export client', 'client')
+
+                    return downloadCSV()
                 }, (err) => {
                     return swal('', 'Erreur interne', 'error')
                 })
             },
-
-            /**
-             * Converts users JSON to CSV
-             * @param JSONData
-             * @param ReportTitle
-             * @param ShowLabel
-             * @constructor
-             */
-            JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
-                let arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-                let CSV = '';
-                if (ShowLabel) {
-                    let row = "";
-                    for (let index in arrData[0]) {
-                        row += index + ',';
-                    }
-                    row = row.slice(0, -1);
-                    CSV += row + '\r\n';
-                }
-
-                for (let i = 0; i < arrData.length; i++) {
-                    let row = "";
-                    //2nd loop will extract each column and convert it in string comma-seprated
-                    for (let index in arrData[i]) {
-                        row += '"' + arrData[i][index] + '",';
-                    }
-                    row.slice(0, row.length - 1);
-                    //add a line break after each row
-                    CSV += row + '\r\n';
-                }
-
-                if (CSV == '') {
-                    alert("Invalid data");
-                    return;
-                }
-
-                let link = document.createElement("a");
-                link.id = "lnkDwnldLnk";
-
-                document.body.appendChild(link);
-
-                let csv = CSV;
-                blob = new Blob([csv], {type: 'text/csv'});
-                let csvUrl = window.URL.createObjectURL(blob);
-                let filename = 'UserExport.csv';
-                $("#lnkDwnldLnk")
-                    .attr({
-                        'download': filename,
-                        'href': csvUrl
-                    });
-
-                $('#lnkDwnldLnk')[0].click();
-                document.body.removeChild(link);
-            }
         }
     }
 );
+
+function convertArrayOfObjectsToCSV(args) {
+    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+    data = args.data || null;
+    if (data == null || !data.length) {
+        return null;
+    }
+
+    columnDelimiter = args.columnDelimiter || ',';
+    lineDelimiter = args.lineDelimiter || '\n';
+
+    keys = Object.keys(data[0]);
+
+    result = '';
+    result += keys.join(columnDelimiter);
+    result += lineDelimiter;
+
+    data.forEach(function (item) {
+        ctr = 0;
+        keys.forEach(function (key) {
+            if (ctr > 0) result += columnDelimiter;
+
+            result += item[key];
+            ctr++;
+        });
+        result += lineDelimiter;
+    });
+
+    return result;
+}
+
+function downloadCSV(args) {
+    var data, filename, link;
+
+    var csv = convertArrayOfObjectsToCSV({
+        data: vm.usersToExport
+    });
+    if (csv == null) return;
+
+    filename = 'Export client.csv';
+
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+    data = encodeURI(csv);
+
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    link.click();
+}

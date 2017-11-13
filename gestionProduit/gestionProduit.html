@@ -223,7 +223,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                     </template>
                                 </v-data-table>
                             </v-card>
-                            <v-dialog width="500px" v-model="dialog" scrollable transition="v-dialog-bottom-transition"
+                            <v-dialog width="500px" height="400px" v-model="dialog" scrollable transition="v-dialog-bottom-transition"
                                       :overlay=false>
 
                                 <v-btn style=" position: fixed;
@@ -338,6 +338,11 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                                     <v-flex xs6>
                                                         <v-checkbox label="Impression face"
                                                                     v-model="produit.printfacepossible"
+                                                                    dark></v-checkbox>
+                                                    </v-flex>
+                                                    <v-flex xs6>
+                                                        <v-checkbox label="Activer promotion"
+                                                                    v-model="produit.activateDiscount"
                                                                     dark></v-checkbox>
                                                     </v-flex>
 

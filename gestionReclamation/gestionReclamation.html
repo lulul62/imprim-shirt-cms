@@ -159,7 +159,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                             </v-card-text>
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
-                                                <v-btn color="green darken-1" flat @click.native="dialog = false">Fermer</v-btn>
+                                                <v-btn color="green darken-1" flat @click.native="dialog = false, mail.message = ''">Fermer</v-btn>
                                                 <v-btn color="green darken-1" flat @click.native="sendMailResponse()">Envoyer</v-btn>
                                             </v-card-actions>
                                         </v-card>
