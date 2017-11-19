@@ -5,27 +5,25 @@ let vm = new Vue({
                 baseUrlProduit: "https://transfertprod-668c2.firebaseio.com/produitList.json",
                 baseUrlEditProduit: "https://transfertprod-668c2.firebaseio.com/produitList/",
                 baseUrlCouleur: "https://transfertprod-668c2.firebaseio.com/couleurList.json",
-                baseUrlStyle: "https://transfertprod-668c2.firebaseio.com/styleList.json",
                 baseUrlGamme: "https://transfertprod-668c2.firebaseio.com/gammeList.json",
                 baseUrlImgList: "https://transfertprod-668c2.firebaseio.com/imglist.json",
                 baseUrlClient: "https://transfertprod-668c2.firebaseio.com/client.json",
                 dialog: false,
                 couleurList: [],
-                styleList: [],
                 gammeList: [],
                 visual: false,
                 seeVisual: false,
                 imgList: [],
+                BASE_URL_USER: "https://transfertprod-668c2.firebaseio.com/user.json",
                 saveModal: false,
                 isLoading: false,
                 createModalTitle: true,
                 notificationError: "",
                 errorForm: false,
                 editModalTitle: false,
-                formSnackbar: false,
                 couleurToShow: [],
                 seeColor: false,
-                genreList: ["Homme", "Femme", "Fille", "Garçon"],
+                genreList: ["Homme", "Femme", "Fille", "Garçon", 'Doming'],
                 edit: false,
                 e6: 1,
                 drawer: true,
@@ -41,270 +39,342 @@ let vm = new Vue({
                 mode: '',
                 timeout: 3000,
                 successtext: "Enregistrement du produit effectué avec succés",
-                edittextsuccess: "Enregistrement de vos modifications effectué avec succés",
+                edittextsuccess: "Vos modifications ont bien été prises en compte",
                 deletesuccess: 'Le produit à été supprimée avec succés',
                 produit: {
                     gamme: "",
                     genre: "",
-                    style: "",
                     couleur: [],
                     visuel: [],
                     poid: "",
                     prix: "",
-                    isActive : false,
+                    activateDiscount : false,
+                    printfacepossible: true,
+                    isActive: false,
                     prixpromotion: "",
-                    tailles : []
+                    tailles: []
 
                 },
                 headers: [
                     {text: 'Gamme', value: 'gamme'},
-                    {text: 'Style', value: 'style'},
                     {text: 'Couleur', value: 'couleur'},
                     {text: 'Visuel', value: 'visuel'},
                     {text: 'Poid', value: 'poid'},
-                    {text: 'Prix', value: 'prix'},
-                    {text : 'Prix promotion', value : 'prixpromotion'},
+                    {text: 'Prix (TTC)', value: 'prix'},
+                    {text: 'Prix promotion (TTC)', value: 'prixpromotion'},
                     {text: "Action", value: ""}
                 ],
+                faceavant: "",
+                facearriere: "",
+                cote: "",
+                couleursRef: [],
                 items: [],
                 currentCouleur: {},
                 couleursList: [],
-                tailles : ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+                tailles: ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
 
             }
+        },
+        mounted() {
+            this.getAllCouleur();
+            this.getAllGamme();
+            this.getAllImage();
+            this.getAllProduit();
         },
         methods: {
             /**
              * Ajoute un produit en base de donnée.
              */
-            addProduit: function (event) {
-                vm.checkForm();
-                if (vm.errorArray.length > 0) {
-                    vm.formSnackbar = true;
-                    return vm.notificationError = vm.errorArray.toString();
+            addProduit(event) {
+                this.produit.visuel = [this.faceavant, this.facearriere, this.cote];
+                this.checkForm();
+                if (this.errorArray.length > 0) {
+                    return swal('', "Les champs suivants sont incorrects ou manquants : " + this.errorArray.toString(), 'error');
                 }
-                vm.dialog = false;
-                vm.saveModal = true;
-                return this.$http.post(vm.baseUrlProduit, vm.produit).then((produit) => {
-                    vm.notificationError = "";
-                    vm.produit.key = produit.body.name;
-                    this.$http.put(vm.baseUrlEditProduit + produit.body.name + '.json', vm.produit).then((resp) => {
-                        vm.produit = {
+                this.dialog = false;
+                this.saveModal = true;
+                return this.$http.post(this.baseUrlProduit, this.produit).then((produit) => {
+                    this.notificationError = "";
+                    this.produit.key = produit.body.name;
+                    this.$http.put(`${this.baseUrlEditProduit + produit.body.name}.json`, this.produit).then((resp) => {
+                        this.produit = {
                             nom: "",
                             gamme: "",
                             genre: "",
-                            style: "",
                             couleur: [],
                             visuel: [],
                             poid: "",
                             prix: "",
-                            isActive : false
-                        },
-                            vm.imgList.forEach(function (img) {
-                                img.isActive = false;
-                            });
-                            vm.snackbar = true;
-                        vm.successtext = "Le produit à été enregistré en base avec succés";
-                        vm.getAllProduit();
-                        return vm.saveModal = false;
+                            isActive: false
+                        }
+                        this.imgList.forEach(img => {
+                            img.isActive = false;
+                        });
+                        this.snackbar = true;
+                        this.successtext = "Le produit à été enregistré en base avec succés";
+                        this.getAllProduit();
+                        return this.saveModal = false;
                     });
                 });
             },
             /**
              * Récupére l'ensemble des produits en base de donnée.
              */
-            getAllProduit: function (event) {
-                vm.items = [];
-                return this.$http.get(vm.baseUrlProduit).then((resp) => {
+            getAllProduit(event) {
+                this.items = [];
+                return this.$http.get(this.baseUrlProduit).then((resp) => {
                     Object.keys(resp.data).forEach((key) => {
-                        vm.items.push(resp.data[key]);
+                        this.items.push(resp.data[key]);
                     })
                 })
             },
             /**
              * Récupére l'ensemble des gammes en base de donnée.
              */
-            getAllGamme: function (event) {
-                return this.$http.get(vm.baseUrlGamme).then((gammes) => {
-                    Object.keys(gammes.data).forEach(function (key) {
-                        vm.gammeList.push(gammes.data[key].name);
+            getAllGamme(event) {
+                return this.$http.get(this.baseUrlGamme).then((gammes) => {
+                    Object.keys(gammes.data).forEach(key => {
+                        this.gammeList.push(gammes.data[key].name);
                     });
                 })
             },
             /**
              * Récupére l'ensemble des couleurs en base de donnée.
              */
-            getAllCouleur: function (event) {
-                return this.$http.get(vm.baseUrlCouleur).then((couleur) => {
-                    Object.keys(couleur.data).forEach(function (key) {
-                        vm.couleurList.push(couleur.data[key].value);
+            getAllCouleur(event) {
+                this.$http.get(this.baseUrlCouleur).then((couleur) => {
+                    Object.keys(couleur.data).forEach(key => {
+                        this.couleursList.push(couleur.data[key].nom);
+                        this.couleursRef.push({
+                            name: couleur.data[key].nom,
+                            color: couleur.data[key].value
+                        })
                     });
                 })
             },
             /**
              * Check de l'état du formulaire avant l'envoie d'un nouveau produit
              */
-            checkForm: function () {
-                vm.errorArray = [];
-                if (vm.produit.gamme === "") {
-                    vm.errorArray.push("Gamme");
+            checkForm() {
+                this.errorArray = [];
+                if (this.produit.gamme === "") {
+                    this.errorArray.push("Gamme");
                 }
-                if (vm.produit.genre === "") {
-                    vm.errorArray.push("Genre")
+                if (this.produit.genre === "") {
+                    this.errorArray.push("Genre")
                 }
-                if (vm.produit.style === "") {
-                    vm.errorArray.push("Style");
+                if (this.produit.prix === "") {
+                    this.errorArray.push("Prix");
                 }
-                if (vm.produit.prix === "") {
-                    vm.errorArray.push("Prix");
+                if (this.produit.poid === "") {
+                    this.errorArray.push("Poid");
                 }
-                if (vm.produit.poid === "") {
-                    vm.errorArray.push("Poid");
+                if (this.faceavant === "") {
+                    this.errorArray.push("Face avant");
                 }
-                if (vm.produit.couleur.length === 0) {
-                    vm.errorArray.push("Couleur");
-                }
-                if (vm.produit.visuel.length === 0) {
-                    vm.errorArray.push("Visuel");
-                }
-                if (vm.produit.visuel.length > 3) {
-                    vm.errorArray.push("3 visuels maximum par produit (coté, face avant, face arrière");
-                }
+                this.checkDecimalPrice()
+            },
 
+            checkDecimalPrice() {
+                "use strict";
+                let priceArray = [this.produit.prix, this.produit.prixpromotion];
+                console.log(priceArray);
+                if (priceArray[0].indexOf(".") == -1 || priceArray[1].indexOf(".") == -1) {
+                    this.errorArray.push('Les prix doivent êtres indiqués en decimal');
+                }
             },
 
             /**
              * Permet de récuperer l'ensemble des images en base de donnée.
              */
-            getAllImage: function (event) {
-                return this.$http.get(vm.baseUrlImgList).then((img) => {
-                    Object.keys(img.data).forEach((key) => {
-                        vm.imgList.push({base64: img.data[key].base64});
-                    })
-                    console.log(vm.imgList)
-                })
-            },
-            /**
-             * Récupére l'ensemble des styles en base de donnée.
-             */
-            getAllStyle: function (event) {
-                return this.$http.get(vm.baseUrlStyle).then((style) => {
-                    Object.keys(style.data).forEach(function (key) {
-                        vm.styleList.push(style.data[key].name);
+            getAllImage(event) {
+                return this.$http.get(this.baseUrlImgList).then((img) => {
+                    Object.keys(img.body).forEach((key) => {
+                        this.imgList.push({base64: img.data[key].base64});
                     });
                 })
             },
             /**
              * Supprime le produit cliqué par l'utilisateur.
              */
-            deleteProduit: function ($event, currentProduit) {
+            deleteProduit($event, currentProduit) {
                 let produitToDelete = currentProduit;
-                return this.$http.delete(vm.baseUrlEditProduit + produitToDelete.key + ".json").then((resp) => {
-                    vm.deletesnackbar = true;
-                    return vm.getAllProduit();
+                return this.$http.delete(`${this.baseUrlEditProduit + produitToDelete.key}.json`).then((resp) => {
+                    this.deletesnackbar = true;
+                    return this.getAllProduit();
                 });
             },
             /**
              * Edit du produit selectionné par l'utilisateur.
              */
-            editProduit: function ($event) {
-                vm.checkForm();
-                if (vm.errorArray.length > 0) {
-                    vm.formSnackbar = true;
-                    return vm.notificationError = vm.errorArray.toString();
+            editProduit($event) {
+                this.produit.visuel = [this.faceavant, this.facearriere, this.cote];
+                console.log(this.produit)
+                this.checkForm();
+                if (this.errorArray.length > 0) {
+                    return swal('', "Les champs suivants sont incorrects ou manquants :" + this.errorArray.toString(), 'error');
                 }
-                vm.dialog = false;
-                vm.saveModal = true;
-                return this.$http.put(vm.baseUrlEditProduit + vm.produit.key + ".json", vm.produit).then((resp) => {
-                    vm.editsnackbar = true;
-                    vm.getAllProduit();
-                    return vm.saveModal = false;
+                this.dialog = false;
+                this.saveModal = true;
+                return this.$http.put(`${this.baseUrlEditProduit + this.produit.key}.json`, this.produit).then((resp) => {
+                    console.log(resp)
+                    this.editsnackbar = true;
+                    this.getAllProduit();
+                    return this.saveModal = false;
                 });
             },
             /**
              * Récupere le produit que l'utilisateur selectionne.
              */
-            getCurrentProduit: function ($event, currentProduit) {
-                vm.editModalTitle = true;
-                vm.createModalTitle = false;
+            getCurrentProduit($event, currentProduit) {
+                this.editModalTitle = true;
+                this.createModalTitle = false;
                 $event.stopPropagation();
-                vm.dialog = true;
-                vm.produit = currentProduit;
-                console.log(vm.produit);
+                this.dialog = true;
+                this.produit = currentProduit;
+                this.faceavant = this.produit.visuel[0];
+                this.facearriere = this.produit.visuel[1];
+                this.cote = this.produit.visuel[2];
 
             },
             /**
              * Ajoute un visuel dans le tableau du produit
              */
-            addVisuelToProduit: function ($event, currentImage) {
-                vm.produit.visuel.push(currentImage);
+            addVisuelToProduit($event, currentImage) {
+                this.produit.visuel.push(currentImage);
                 return currentImage.isActive = true;
             },
             /**
              * Vide le tableau visuel de produit
              */
-            clearProductVisual: function ($event) {
-                vm.produit.visuel = [];
-                vm.imgList.forEach(function (img) {
+            clearProductVisual($event) {
+                this.produit.visuel = [];
+                this.imgList.forEach(img => {
                     img.isActive = false;
                 });
             },
             /**
              * Affiche la liste des visuels du produit selectionné par l'utilisateur
              */
-            showCurrentVisualOfproduct: function ($event, currentProduit) {
-                vm.visualToShow = currentProduit.item.visuel;
-            },
+            showCurrentVisualOfproduct($event, currentProduit) {
+                this.visualToShow = [];
+                currentProduit.item.visuel.forEach(visual => {
+                    if(visual !== '') {
+                        this.visualToShow.push(visual)
+                    }
+                })
 
+            },
             /**
              * Ferme la modal et annule toute les actions relatives à celle ci
              */
-            cancelAction: function () {
-                vm.dialog = false;
-                vm.editModalTitle = false;
-                vm.createModalTitle = true;
-                vm.produit = {
+            cancelAction() {
+                this.dialog = false;
+                this.editModalTitle = false;
+                this.createModalTitle = true;
+                this.produit = {
                     nom: "",
                     gamme: "",
                     genre: "",
-                    style: "",
                     couleur: [],
                     visuel: [],
                     poid: "",
-                    prix: ""
+                    prix: "",
+                    printfacepossible: true,
+                    tailles: []
                 };
-                vm.imgList.forEach(function (img) {
+                this.faceavant = "";
+                this.facearriere = "";
+                this.cote = "";
+                this.imgList.forEach(img => {
                     img.isActive = false;
                 })
             },
             /**
              * Affiche la liste des couleurs du produit selectionné par l'utilisateur
              */
-            showCurrentColorOfProduct: function ($event, currentProduit) {
-                vm.couleurToShow = [];
-                currentProduit.item.couleur.forEach((couleur) => {
-                    vm.couleurToShow.push({"colorName": couleur});
+            showCurrentColorOfProduct($event, currentProduit) {
+                this.couleurToShow = [];
+                console.log(currentProduit.item.couleur)
+                currentProduit.item.couleur.forEach(colorName => {
+                    let index = _.findIndex(this.couleursRef, { 'name': colorName });
+                    this.couleurToShow.push({colorName : this.couleursRef[index].color})
                 });
+                console.log(this.couleurToShow)
+                return this.couleurToShow
             },
+
             /**
-             * Export de la base de donnée client
+             * Export client json to csv
              */
-            exportClientDatabase: function ($event) {
-                return this.$http.get(vm.baseUrlClient).then((clientFile) => {
-                    let link = document.createElement("a");
-                    link.download = "base de donnée client.txt";
-                    let data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clientFile.data));
-                    link.href = "data:" + data;
-                    link.click();
+            exportClientToCsv() {
+                vm.usersToExport = [];
+                this.$http.get(this.BASE_URL_USER).then(res => {
+                    Object.keys(res.body).forEach(key => {
+                        vm.usersToExport.push({client: res.body[key].name + ' ' + res.body[key].firstname, email: res.body[key].email});
+                    })
+                    return downloadCSV()
+                }, (err) => {
+                    return swal('', 'Erreur interne', 'error')
                 })
-            }
+            },
         }
     }
 );
 
-vm.getAllCouleur();
-vm.getAllGamme();
-vm.getAllStyle();
-vm.getAllImage();
-vm.getAllProduit();
+function convertArrayOfObjectsToCSV(args) {
+    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+    data = args.data || null;
+    if (data == null || !data.length) {
+        return null;
+    }
+
+    columnDelimiter = args.columnDelimiter || ',';
+    lineDelimiter = args.lineDelimiter || '\n';
+
+    keys = Object.keys(data[0]);
+
+    result = '';
+    result += keys.join(columnDelimiter);
+    result += lineDelimiter;
+
+    data.forEach(function (item) {
+        ctr = 0;
+        keys.forEach(function (key) {
+            if (ctr > 0) result += columnDelimiter;
+
+            result += item[key];
+            ctr++;
+        });
+        result += lineDelimiter;
+    });
+
+    return result;
+}
+
+function downloadCSV(args) {
+    var data, filename, link;
+
+    var csv = convertArrayOfObjectsToCSV({
+        data: vm.usersToExport
+    });
+    if (csv == null) return;
+
+    filename = 'Export client.csv';
+
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+    data = encodeURI(csv);
+
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    link.click();
+}
+
+
+
+
