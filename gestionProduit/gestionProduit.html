@@ -103,26 +103,40 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                 </v-list-item>
 
             </v-list>
+
             <v-list-tile>
                 <v-list-tile-action>
-                    <v-icon>record_voice_over</v-icon>
+                    <v-icon>chrome_reader_mode</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
                     <v-list-tile-title>
-                        <a href="../gestionReclamation/gestionReclamation.html">Réclamations</a>
+                        <v-dialog v-model="adDialog" persistent width="500px">
+                            <a color="primary" dark slot="activator" @click.native="showAdDialog()">Définir la publicité</a>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="headline">Lien de l'image</span>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex xs12 sm12 md12>
+                                                <v-text-field v-model="currentAd" label="Lien de l'image de publicité" required></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" flat @click.native="adDialog = false">Fermer</v-btn>
+                                    <v-btn color="blue darken-1" flat @click.native="saveAd()">Enregistrer</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+
                     </v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
 
-            <v-list-tile>
-                <v-list-tile-action>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>
-                        <v-btn @click.native="exportClientToCsv()">Export des clients</v-btn>
-                    </v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
         </v-navigation-drawer>
         <v-toolbar fixed class="grey darken-3" light>
             <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -383,6 +397,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
             {{ deletesuccess }}
             <v-btn flat class="yellow--text" @click.native="deletesnackbar = false">Fermer</v-btn>
         </v-snackbar>
+
     </v-app>
 </div>
 <script src='https://unpkg.com/vue/dist/vue.js'></script>

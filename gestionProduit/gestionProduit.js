@@ -8,6 +8,7 @@ let vm = new Vue({
                 baseUrlGamme: "https://transfertprod-668c2.firebaseio.com/gammeList.json",
                 baseUrlImgList: "https://transfertprod-668c2.firebaseio.com/imglist.json",
                 baseUrlClient: "https://transfertprod-668c2.firebaseio.com/client.json",
+                baseUrlAd: 'https://transfertprod-668c2.firebaseio.com/ad.json',
                 dialog: false,
                 couleurList: [],
                 gammeList: [],
@@ -23,7 +24,7 @@ let vm = new Vue({
                 editModalTitle: false,
                 couleurToShow: [],
                 seeColor: false,
-                genreList: ["Homme", "Femme", "Fille", "Garçon", 'Doming'],
+                genreList: ["Homme", "Femme", "Fille", "Garçon", 'Doming', 'Mug'],
                 edit: false,
                 e6: 1,
                 drawer: true,
@@ -64,9 +65,11 @@ let vm = new Vue({
                     {text: 'Prix promotion (TTC)', value: 'prixpromotion'},
                     {text: "Action", value: ""}
                 ],
+                currentAd: '',
                 faceavant: "",
                 facearriere: "",
                 cote: "",
+                adDialog: false,
                 couleursRef: [],
                 items: [],
                 currentCouleur: {},
@@ -127,6 +130,8 @@ let vm = new Vue({
                     Object.keys(resp.data).forEach((key) => {
                         this.items.push(resp.data[key]);
                     })
+                }, (err) => {
+                    swal('', 'Un erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
                 })
             },
             /**
@@ -137,6 +142,8 @@ let vm = new Vue({
                     Object.keys(gammes.data).forEach(key => {
                         this.gammeList.push(gammes.data[key].name);
                     });
+                }, (err) => {
+                    swal('', 'Un erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
                 })
             },
             /**
@@ -151,6 +158,8 @@ let vm = new Vue({
                             color: couleur.data[key].value
                         })
                     });
+                }, (err) => {
+                    swal('', 'Un erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
                 })
             },
             /**
@@ -210,7 +219,6 @@ let vm = new Vue({
              */
             editProduit($event) {
                 this.produit.visuel = [this.faceavant, this.facearriere, this.cote];
-                console.log(this.produit)
                 this.checkForm();
                 if (this.errorArray.length > 0) {
                     return swal('', "Les champs suivants sont incorrects ou manquants :" + this.errorArray.toString(), 'error');
@@ -218,7 +226,6 @@ let vm = new Vue({
                 this.dialog = false;
                 this.saveModal = true;
                 return this.$http.put(`${this.baseUrlEditProduit + this.produit.key}.json`, this.produit).then((resp) => {
-                    console.log(resp)
                     this.editsnackbar = true;
                     this.getAllProduit();
                     return this.saveModal = false;
@@ -319,6 +326,43 @@ let vm = new Vue({
                     return swal('', 'Erreur interne', 'error')
                 })
             },
+
+            /**
+             * show edit ad dialog
+             */
+            showAdDialog () {
+                console.log('je passe')
+                  this.getPublicityLink()
+                    this.adDialog = true
+                },
+
+            /**
+             * Save ad in database
+             */
+            saveAd () {
+                console.log(this.currentAd)
+                this.$http.put(this.baseUrlAd, this.currentAd).then(res => {
+                    swal('', 'Publicité mise à jour avec succés', 'success')
+                    this.adDialog = false
+                }, (err) => {
+                    console.log(err)
+                    swal('', 'Une erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
+
+                })
+            },
+
+            /**
+             * Get ad form database
+             */
+             getPublicityLink () {
+               this.$http.get(this.baseUrlAd).then(res => {
+                   Object.keys(res).forEach(key => {
+                       this.currentAd = res[key]
+                   });
+                   return this.currentAd
+               })
+
+            }
         }
     }
 );
