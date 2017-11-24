@@ -6,9 +6,12 @@ let vm = new Vue({
                 state: {},
                 constant: {
                     BASE_URL_ORDERS: "https://transfertprod-668c2.firebaseio.com/user.json",
-                    BASE_URL_USER: "https://transfertprod-668c2.firebaseio.com/user/"
+                    BASE_URL_USER: "https://transfertprod-668c2.firebaseio.com/user/",
                 },
                 drawer: true,
+                currentAd: '',
+                adDialog: false,
+                baseUrlAd: 'https://transfertprod-668c2.firebaseio.com/styleList/ad.json',
                 orders: [],
                 max25chars: (v) => v.length <= 25 || 'Input too long!',
                 tmp: '',
@@ -34,6 +37,7 @@ let vm = new Vue({
         mounted() {
             "use strict";
             this.getAllOrders();
+            this.getPublicityLink();
 
         },
         methods: {
@@ -114,6 +118,34 @@ let vm = new Vue({
                     return swal('', 'Erreur interne', 'error')
                 })
             },
+
+            /**
+             * Save ad in database
+             */
+            saveAd () {
+                this.$http.put(this.baseUrlAd, JSON.stringify(this.currentAd)).then(res => {
+                    swal('', 'Publicité mise à jour avec succés', 'success')
+                    this.adDialog = false
+                    this.getPublicityLink()
+                }, (err) => {
+                    console.log(err)
+                    swal('', 'Une erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
+
+                })
+            },
+
+            /**
+             * Get ad form database
+             */
+            getPublicityLink () {
+                this.$http.get(this.baseUrlAd).then(res => {
+                    this.currentAd = res.body
+                }, (err) => {
+                    "use strict";
+                    console.log(err)
+                })
+
+            }
         }
     }
 );

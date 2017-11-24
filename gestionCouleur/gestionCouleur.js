@@ -5,11 +5,14 @@ let vm = new Vue({
                 baseUrlCouleur: "https://transfertprod-668c2.firebaseio.com/couleurList.json",
                 baseUrlEditCouleur: "https://transfertprod-668c2.firebaseio.com/couleurList/",
                 baseUrlProduit : "https://transfertprod-668c2.firebaseio.com/produitList.json",
+                baseUrlAd: 'https://transfertprod-668c2.firebaseio.com/styleList/ad.json',
                 dialog: false,
                 edit: false,
+                currentAd: '',
                 drawer: true,
                 snackbar: false,
                 editsnackbar: false,
+                adDialog: false,
                 deletesnackbar: false,
                 emptyForm: false,
                 deleteModal: false,
@@ -38,6 +41,7 @@ let vm = new Vue({
             "use strict";
             this.getAllCouleurs();
             this.getAllProduit()
+            this.getPublicityLink();
         },
         methods: {
             /**
@@ -150,6 +154,34 @@ let vm = new Vue({
                     return swal('', 'Erreur interne', 'error')
                 })
             },
+
+            /**
+             * Save ad in database
+             */
+            saveAd () {
+                this.$http.put(this.baseUrlAd, JSON.stringify(this.currentAd)).then(res => {
+                    swal('', 'Publicité mise à jour avec succés', 'success')
+                    this.adDialog = false
+                    this.getPublicityLink()
+                }, (err) => {
+                    console.log(err)
+                    swal('', 'Une erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
+
+                })
+            },
+
+            /**
+             * Get ad form database
+             */
+            getPublicityLink () {
+                this.$http.get(this.baseUrlAd).then(res => {
+                    this.currentAd = res.body
+                }, (err) => {
+                    "use strict";
+                    console.log(err)
+                })
+
+            }
         }
     }
 );

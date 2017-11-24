@@ -8,7 +8,7 @@ let vm = new Vue({
                 baseUrlGamme: "https://transfertprod-668c2.firebaseio.com/gammeList.json",
                 baseUrlImgList: "https://transfertprod-668c2.firebaseio.com/imglist.json",
                 baseUrlClient: "https://transfertprod-668c2.firebaseio.com/client.json",
-                baseUrlAd: 'https://transfertprod-668c2.firebaseio.com/ad.json',
+                baseUrlAd: 'https://transfertprod-668c2.firebaseio.com/styleList/ad.json',
                 dialog: false,
                 couleurList: [],
                 gammeList: [],
@@ -84,6 +84,7 @@ let vm = new Vue({
             this.getAllGamme();
             this.getAllImage();
             this.getAllProduit();
+            this.getPublicityLink();
         },
         methods: {
             /**
@@ -340,10 +341,10 @@ let vm = new Vue({
              * Save ad in database
              */
             saveAd () {
-                console.log(this.currentAd)
-                this.$http.put(this.baseUrlAd, this.currentAd).then(res => {
+                this.$http.put(this.baseUrlAd, JSON.stringify(this.currentAd)).then(res => {
                     swal('', 'Publicité mise à jour avec succés', 'success')
                     this.adDialog = false
+                    this.getPublicityLink()
                 }, (err) => {
                     console.log(err)
                     swal('', 'Une erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
@@ -356,10 +357,10 @@ let vm = new Vue({
              */
              getPublicityLink () {
                this.$http.get(this.baseUrlAd).then(res => {
-                   Object.keys(res).forEach(key => {
-                       this.currentAd = res[key]
-                   });
-                   return this.currentAd
+                    this.currentAd = res.body
+               }, (err) => {
+                   "use strict";
+                   console.log(err)
                })
 
             }

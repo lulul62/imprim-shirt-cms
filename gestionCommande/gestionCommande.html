@@ -82,6 +82,38 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                 </v-list-item>
 
             </v-list>
+            <v-list-tile>
+                <v-list-tile-action>
+                    <v-icon>chrome_reader_mode</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>
+                        <v-dialog v-model="adDialog" persistent width="500px">
+                            <a color="primary" dark slot="activator" @click.native="showAdDialog()">Définir la publicité</a>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="headline">Lien de l'image</span>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex xs12 sm12 md12>
+                                                <v-text-field v-model="currentAd" label="Lien de l'image de publicité" required></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" flat @click.native="adDialog = false">Fermer</v-btn>
+                                    <v-btn color="blue darken-1" flat @click.native="saveAd()">Enregistrer</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+
+                    </v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
         </v-navigation-drawer>
         <v-toolbar fixed class="grey darken-3" light>
             <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>

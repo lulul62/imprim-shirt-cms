@@ -1,4 +1,4 @@
-let vm = new Vue({
+ new Vue({
         el: "#app",
         data() {
             return {
@@ -7,9 +7,12 @@ let vm = new Vue({
                 baseUrlProduit: "https://transfertprod-668c2.firebaseio.com/produitList.json",
                 dialog: false,
                 editModalGamme: false,
+                baseUrlAd: 'https://transfertprod-668c2.firebaseio.com/styleList/ad.json',
                 createModalGamme: true,
                 drawer: true,
                 copyGamme: "",
+                currentAd: '',
+                adDialog: false,
                 snackbar: false,
                 deleteDialog: false,
                 editsnackbar: false,
@@ -38,6 +41,7 @@ let vm = new Vue({
         mounted() {
             this.getAllProduit();
             this.getAllGamme();
+            this.getPublicityLink();
 
         },
         methods: {
@@ -45,16 +49,16 @@ let vm = new Vue({
              * Ajoute une gamme en base de donnée.
              */
             addGamme: function (event) {
-                if (vm.gamme.name === "") {
-                    return vm.emptyForm = true;
+                if (this.gamme.name === "") {
+                    return this.emptyForm = true;
                 }
-                this.$http.post(vm.baseUrlGamme, vm.gamme).then((resp) => {
-                    vm.gamme.key = resp.body.name;
-                    return this.$http.put(vm.baseUrlEditGamme + resp.body.name + '.json', vm.gamme).then((resp) => {
-                        vm.gamme.name = "";
-                        vm.dialog = false;
-                        vm.snackbar = true;
-                        return vm.getAllGamme();
+                this.$http.post(this.baseUrlGamme, this.gamme).then((resp) => {
+                    this.gamme.key = resp.body.name;
+                    return this.$http.put(this.baseUrlEditGamme + resp.body.name + '.json', this.gamme).then((resp) => {
+                        this.gamme.name = "";
+                        this.dialog = false;
+                        this.snackbar = true;
+                        return this.getAllGamme();
                     });
                 })
             },
@@ -62,27 +66,26 @@ let vm = new Vue({
              * Récupére l'ensemble des gammes en base de donnée.
              */
             getAllGamme: function (event) {
-                return this.$http.get(vm.baseUrlGamme).then((resp) => {
-                    vm.gammeList = resp.data;
+                return this.$http.get(this.baseUrlGamme).then((resp) => {
+                    this.gammeList = resp.data;
                 })
             },
             /**
              * Récupére l'ensemble des produits en base de donnée.
              */
             getAllProduit: function (event) {
-                return this.$http.get(vm.baseUrlProduit).then((resp) => {
+                return this.$http.get(this.baseUrlProduit).then((resp) => {
                     Object.keys(resp.data).forEach((key) => {
                         this.product.push(resp.data[key]);
                     })
-                    console.log(this.product);
                 })
             },
             /**
              * Supprime la gamme cliqué par l'utilisateur.
              */
             getCurrentGammeToDelete: function ($event, currentGamme) {
-                vm.gammeToDelete = currentGamme;
-                vm.deleteDialog = true;
+                this.gammeToDelete = currentGamme;
+                this.deleteDialog = true;
             },
 
             /**
@@ -91,13 +94,13 @@ let vm = new Vue({
              */
             deleteCurrentGamme() {
                 "use strict";
-                if (_.find(this.product, {'gamme': vm.gammeToDelete.name}) !== undefined) {
+                if (_.find(this.product, {'gamme': this.gammeToDelete.name}) !== undefined) {
                     return swal('', 'Il est impossible de supprimer une gamme utilisée par un produit', 'error');
                 }
-                return this.$http.delete(vm.baseUrlEditGamme + vm.gammeToDelete.key + '.json').then(resp => {
+                return this.$http.delete(this.baseUrlEditGamme + this.gammeToDelete.key + '.json').then(resp => {
                     this.getAllGamme();
-                    vm.deletesnackbar = true;
-                    return vm.deleteDialog = false;
+                    this.deletesnackbar = true;
+                    return this.deleteDialog = false;
                 });
             },
 
@@ -105,16 +108,16 @@ let vm = new Vue({
              * Edit de la gamme selectionné par l'utilisateur.
              */
             editGamme: function () {
-                if (vm.gamme.name === "") {
-                    return vm.emptyForm = true;
+                if (this.gamme.name === "") {
+                    return this.emptyForm = true;
                 }
-                return this.$http.put(vm.baseUrlEditGamme + vm.gamme.key + ".json", vm.gamme).then((resp) => {
-                    vm.editsnackbar = true;
-                    vm.createModalGamme = true;
-                    vm.dialog = false;
-                    vm.editModalGamme = false;
-                    vm.gamme.name = "";
-                    return vm.getAllGamme();
+                return this.$http.put(this.baseUrlEditGamme + this.gamme.key + ".json", this.gamme).then((resp) => {
+                    this.editsnackbar = true;
+                    this.createModalGamme = true;
+                    this.dialog = false;
+                    this.editModalGamme = false;
+                    this.gamme.name = "";
+                    return this.getAllGamme();
                 });
             },
             /**
@@ -122,28 +125,56 @@ let vm = new Vue({
              */
             getCurrentGamme: function ($event, currentGamme) {
 
-                vm.editModalGamme = true;
-                vm.createModalGamme = false;
-                vm.dialog = true;
+                this.editModalGamme = true;
+                this.createModalGamme = false;
+                this.dialog = true;
                 $event.stopPropagation();
-                vm.gamme = currentGamme;
-                vm.copyGamme = vm.gamme.name;
+                this.gamme = currentGamme;
+                this.copyGamme = this.gamme.name;
             },
 
             /**
              * Export client json to csv
              */
             exportClientToCsv() {
-                vm.usersToExport = [];
+                this.usersToExport = [];
                 this.$http.get(this.BASE_URL_USER).then(res => {
                     Object.keys(res.body).forEach(key => {
-                        vm.usersToExport.push({client: res.body[key].name + ' ' + res.body[key].firstname, email: res.body[key].email});
+                        this.usersToExport.push({client: res.body[key].name + ' ' + res.body[key].firstname, email: res.body[key].email});
                     })
                     return downloadCSV()
                 }, (err) => {
                     return swal('', 'Erreur interne', 'error')
                 })
             },
+
+            /**
+             * Save ad in database
+             */
+            saveAd () {
+                this.$http.put(this.baseUrlAd, JSON.stringify(this.currentAd)).then(res => {
+                    swal('', 'Publicité mise à jour avec succés', 'success')
+                    this.adDialog = false
+                    this.getPublicityLink()
+                }, (err) => {
+                    console.log(err)
+                    swal('', 'Une erreur interne est survenue, veuillez re essayer ultérieurement', 'error')
+
+                })
+            },
+
+            /**
+             * Get ad form database
+             */
+            getPublicityLink () {
+                this.$http.get(this.baseUrlAd).then(res => {
+                    this.currentAd = res.body
+                }, (err) => {
+                    "use strict";
+                    console.log(err)
+                })
+
+            }
         }
     }
 );
@@ -183,7 +214,7 @@ function downloadCSV(args) {
     var data, filename, link;
 
     var csv = convertArrayOfObjectsToCSV({
-        data: vm.usersToExport
+        data: this.usersToExport
     });
     if (csv == null) return;
 
@@ -200,6 +231,3 @@ function downloadCSV(args) {
     link.click();
 }
 
-
-vm.getAllGamme();
-vm.getAllProduit();
