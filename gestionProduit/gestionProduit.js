@@ -93,6 +93,9 @@ let vm = new Vue({
             addProduit(event) {
                 this.produit.visuel = [this.faceavant, this.facearriere, this.cote];
                 this.checkForm();
+                if(this.produit.prixpromotion === "" && this.produit.activateDiscount) {
+                    return swal('', "Impossible d'activer la promotion si le champ prix promotion n'est pas renseigné", 'error')
+                }
                 if (this.errorArray.length > 0) {
                     return swal('', "Les champs suivants sont incorrects ou manquants : " + this.errorArray.toString(), 'error');
                 }
@@ -183,7 +186,14 @@ let vm = new Vue({
                 if (this.faceavant === "") {
                     this.errorArray.push("Face avant");
                 }
-                this.checkDecimalPrice()
+                console.log(this.produit)
+                if(this.produit.prixpromotion !== "") {
+                    return this.checkDecimalPrice()
+                }
+                    if(this.produit.prix.indexOf(".") == -1) {
+                        this.errorArray.push("Les prix doivent êtres indiqués en décimal")
+                    }
+
             },
 
             checkDecimalPrice() {
@@ -221,6 +231,9 @@ let vm = new Vue({
             editProduit($event) {
                 this.produit.visuel = [this.faceavant, this.facearriere, this.cote];
                 this.checkForm();
+                if(this.produit.prixpromotion === "" && this.produit.activateDiscount) {
+                    return swal('', "Impossible d'activer la promotion si le champ prix promotion n'est pas renseigné", 'error')
+                }
                 if (this.errorArray.length > 0) {
                     return swal('', "Les champs suivants sont incorrects ou manquants :" + this.errorArray.toString(), 'error');
                 }

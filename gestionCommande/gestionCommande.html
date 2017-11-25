@@ -20,6 +20,18 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
             text-decoration: none;
             color: black;
         }
+        .carousel {
+            height: 500px;
+            width: 89%;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+        }
+
+        .card__row {
+            display: block;
+        }
     </style>
 
 </head>
@@ -139,6 +151,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                     v-bind:headers="headers"
                                     v-bind:items="items"
                                     v-bind:search="search"
+                                    hide-actions
                             >
                                 <template slot="items" scope="props">
                                     <td class="text-xs-right">{{ props.item.reference }}</td>
@@ -151,17 +164,13 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                         <v-btn @click.native="getCurrentOrder(props.item)" secondary light>Éditer</v-btn>
                                         <template>
                                             <v-layout row justify-center>
-                                                <v-dialog v-model="dialog" persistent width="430px" scrollable>
+                                                <v-dialog v-model="dialog" persistent width="430px" :scrollable="true">
                                                     <v-card>
-                                                        <v-card-title>
+                                                        <v-card-row height="500px">
+                                                        <v-card-title actions>
                                                             <span class="headline">Commande {{currentOrder.reference}}</span>
                                                         </v-card-title>
                                                         <v-card-text>
-                                                            <v-container grid-list-md>
-                                                                <v-layout wrap>
-
-                                                                    <v-flex xs12>
-                                                                        <template>
                                                                             <v-expansion-panel>
                                                                                 <v-expansion-panel-content v-for="content in currentOrder.content">
                                                                                     <div slot="header">{{content.gamme}}</div>
@@ -195,7 +204,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                                                                     </v-card>
                                                                                 </v-expansion-panel-content>
                                                                             </v-expansion-panel>
-                                                                        </template>
+
                                                                         <br>
                                                                         <v-select
                                                                                 label="État de la commande"
@@ -203,10 +212,8 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                                                                 v-model="currentOrder.state"
                                                                                 :items="['En cours de préparation', 'En cours de livraison', 'Livré']"
                                                                         ></v-select>
-                                                                    </v-flex>
-                                                                </v-layout>
-                                                            </v-container>
                                                         </v-card-text>
+                                                        </v-card-row>
                                                         <v-card-actions>
                                                             <v-spacer></v-spacer>
                                                             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Fermer</v-btn>
