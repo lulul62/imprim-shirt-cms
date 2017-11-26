@@ -212,6 +212,7 @@ https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.1/sweetalert2.min
                                                                                 v-model="currentOrder.state"
                                                                                 :items="['En cours de préparation', 'En cours de livraison', 'Livré']"
                                                                         ></v-select>
+                                                                    <v-btn @click.native="downloadVisuals" secondary light>Télécharger les visuels</v-btn>
                                                         </v-card-text>
                                                         </v-card-row>
                                                         <v-card-actions>

@@ -145,10 +145,43 @@ let vm = new Vue({
                     console.log(err)
                 })
 
+            },
+
+            /**
+             * Download all visuals of an order
+             * @param item
+             */
+            downloadVisuals () {
+                let imgArray = [];
+                this.currentOrder.content.forEach(order => {
+                    order.visual.forEach(visual => {
+                        if(visual.fullsizeimage !== undefined) {
+                            imgArray.push(visual.fullsizeimage);
+                        }
+                    })
+                })
+                downloadAll(imgArray)
             }
         }
     }
 );
+
+function downloadAll(urls) {
+    var link = document.createElement('a');
+
+    link.setAttribute('download', null);
+    link.style.display = 'none';
+
+    document.body.appendChild(link);
+
+    for (var i = 0; i < urls.length; i++) {
+        link.setAttribute('href', urls[i]);
+        link.setAttribute('download', 'image' + i);
+        link.click();
+    }
+
+    document.body.removeChild(link);
+}
 
 function convertArrayOfObjectsToCSV(args) {
     var result, ctr, keys, columnDelimiter, lineDelimiter, data;
@@ -201,3 +234,5 @@ function downloadCSV(args) {
     link.setAttribute('download', filename);
     link.click();
 }
+
+
