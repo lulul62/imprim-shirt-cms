@@ -99,6 +99,9 @@ let vm = new Vue({
                 if (this.errorArray.length > 0) {
                     return swal('', "Les champs suivants sont incorrects ou manquants : " + this.errorArray.toString(), 'error');
                 }
+                this.produit.prix = this.produit.prix.replace(",", ".")
+                this.produit.prixpromotion = this.produit.prixpromotion.replace(",", ".")
+                this.produit.poid = this.produit.poid.replace(",", ".")
                 this.dialog = false;
                 this.saveModal = true;
                 return this.$http.post(this.baseUrlProduit, this.produit).then((produit) => {
@@ -237,6 +240,9 @@ let vm = new Vue({
                 if (this.errorArray.length > 0) {
                     return swal('', "Les champs suivants sont incorrects ou manquants :" + this.errorArray.toString(), 'error');
                 }
+                this.produit.prix = this.produit.prix.replace(",", ".")
+                this.produit.prixpromotion = this.produit.prixpromotion.replace(",", ".")
+                this.produit.poid = this.produit.poid.replace(",", ".")
                 this.dialog = false;
                 this.saveModal = true;
                 return this.$http.put(`${this.baseUrlEditProduit + this.produit.key}.json`, this.produit).then((resp) => {
